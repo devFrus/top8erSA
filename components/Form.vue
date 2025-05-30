@@ -1,6 +1,31 @@
 <template>
   <form @submit.prevent="submitForm" class="top8-form">
     <div class="title">El cojonudo Top 8 Generator</div>
+    <!-- Botón de autocompletar para pruebas -->
+    <button type="button" class="fill-btn" @click="fillRandom">Rellenar aleatorio</button>
+    <!-- Nuevo campo para subir logo del torneo -->
+    <div class="tournament-logo-field">
+      <label>
+        Logo del torneo:
+        <input type="file" accept="image/*" @change="onLogoChange" />
+      </label>
+      <div v-if="logoPreview" class="logo-preview">
+        <img :src="logoPreview" alt="Logo preview" />
+      </div>
+    </div>
+    <!-- NUEVO: Color pickers -->
+    <div class="color-pickers">
+      <label>
+        Color primario:
+        <input type="color" v-model="primaryColor" />
+        <span class="color-value">{{ primaryColor }}</span>
+      </label>
+      <label>
+        Color secundario:
+        <input type="color" v-model="secondaryColor" />
+        <span class="color-value">{{ secondaryColor }}</span>
+      </label>
+    </div>
     <div class="players-grid">
       <div v-for="(player, idx) in players" :key="idx" class="player-form">
         <h3>Jugador {{ idx + 1 }}</h3>
@@ -46,12 +71,23 @@
         </label>
       </div>
     </div>
+    <!-- NUEVOS CAMPOS ABAJO -->
+    <div class="tournament-fields">
+      <label>
+        Nombre del torneo:
+        <input type="text" v-model="tournamentName" placeholder="Ej: Ult. Vortex #14" />
+      </label>
+      <label>
+        Fecha del torneo:
+        <input type="date" v-model="tournamentDate" />
+      </label>
+    </div>
     <button type="submit" class="submit-btn">Guardar Top 8</button>
   </form>
 </template>
 
 <script lang="ts" setup>
-import { reactive, nextTick } from "vue";
+import { reactive, ref, nextTick } from "vue";
 const emit = defineEmits(["formSubmitted"]);
 const { data: charactersData } = await useAsyncData("charactersList", async () => {
   return await $fetch(`/api/characters`);
@@ -80,6 +116,34 @@ const players = reactive<PlayerForm[]>(
     activeSuggestion: 0,
   }))
 );
+
+// Nuevo: estado para el logo
+const logoFile = ref<File | null>(null);
+const logoPreview = ref<string | null>(null);
+
+// NUEVO: estado para los colores
+const primaryColor = ref("#ff42ec");
+const secondaryColor = ref("#66195f");
+
+// NUEVOS: estado para el nombre y fecha del torneo
+const tournamentName = ref("");
+const tournamentDate = ref("");
+
+function onLogoChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) {
+    logoFile.value = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      logoPreview.value = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    logoFile.value = null;
+    logoPreview.value = null;
+  }
+}
 
 function filterCharacters(idx: number) {
   const search = players[idx].character.toLowerCase();
@@ -135,13 +199,58 @@ function hideSuggestions(idx: number) {
 }
 
 function submitForm() {
-  emit("formSubmitted", players);
+  emit("formSubmitted", {
+    players,
+    logo: logoPreview.value, // Puedes enviar el base64 o el File según lo que necesites
+    primaryColor: primaryColor.value,
+    secondaryColor: secondaryColor.value,
+    tournamentName: tournamentName.value,
+    tournamentDate: tournamentDate.value,
+  });
+}
+
+function getRandomItem<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function fillRandom() {
+  const randomNames = [
+    "Pepe", "Juan", "Ana", "Luis", "Marta", "Sergio", "Lucía", "Carlos"
+  ];
+  const randomHandles = [
+    "@pepe", "@juan", "@ana", "@luis", "@marta", "@sergio", "@lucia", "@carlos"
+  ];
+  for (let i = 0; i < players.length; i++) {
+    players[i].name = randomNames[i % randomNames.length] + (Math.floor(Math.random() * 100));
+    players[i].handle = randomHandles[i % randomHandles.length];
+    const char = getRandomItem(allCharacters);
+    players[i].character = char ? char.name : "";
+    players[i].characterID = char ? char.id : null;
+    players[i].filteredCharacters = allCharacters;
+  }
+  // Colores aleatorios
+  primaryColor.value = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0");
+  secondaryColor.value = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0");
 }
 </script>
 
+<style>
+:root {
+  --primary-bg: #181824;
+  --secondary-bg: #232946;
+  --card-bg: #232946;
+  --input-bg: #232946;
+  --input-border: #393a56;
+  --input-focus: #ffee8c;
+  --accent: #ffee8c;
+  --text-main: #ffee8c;
+  --text-secondary: #fffbe6;
+  --card-shadow: 0 4px 24px rgba(255, 238, 140, 0.08);
+  --card-shadow-strong: 0 2px 8px rgba(255, 238, 140, 0.18);
+}
+</style>
+
 <style scoped>
-
-
 .title {
   font-family: "Proxima Nova", sans-serif;
   font-weight: 700;
@@ -273,6 +382,96 @@ input[type="text"]:focus {
   background: #232946;
   color: var(--accent);
   border: 1.5px solid var(--accent);
+}
+
+.tournament-logo-field {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.tournament-logo-field label {
+  color: var(--text-main);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.logo-preview img {
+  margin-top: 0.5rem;
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 0.5rem;
+  border: 2px solid var(--accent);
+  background: #232946;
+}
+
+.color-pickers {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.color-pickers label {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.color-value {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-left: 0.3rem;
+  font-family: monospace;
+}
+
+.fill-btn {
+  margin-bottom: 1.5rem;
+  background: #393a56;
+  color: #ffee8c;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.fill-btn:hover {
+  background: #ffee8c;
+  color: #232946;
+}
+
+.tournament-fields {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Igual que .players-grid */
+  gap: 2rem 1.5rem;                      /* Igual que .players-grid */
+}
+.tournament-fields label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: var(--text-main);
+  gap: 0.3rem;
+  min-width: 0; /* Igual que las cards */
+}
+
+.tournament-fields input[type="text"],
+.tournament-fields input[type="date"] {
+  margin-top: 0.3rem;
+  padding: 0.45rem 0.7rem;
+  border: 1.5px solid var(--input-border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  transition: border 0.2s, background 0.2s, color 0.2s;
+}
+.tournament-fields input[type="text"]:focus,
+.tournament-fields input[type="date"]:focus {
+  border: 1px solid var(--input-focus);
+  outline: none;
+  background: #232946;
+  color: var(--accent);
 }
 
 @media (max-width: 1100px) {

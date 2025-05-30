@@ -1,9 +1,27 @@
 <template>
-  <div v-if="characters.length" class="top-8-container">
-    <div class="card card-1">
-      <div
-        class="render render_outside"
-        :style="{
+  <div ref="top8Ref" class="top-8" style="z-index: 100;position: relative;">
+    <div class="logo-container">
+      <div class="logo left">
+        <img :src="props.logo" alt="Logo Comunidad" />
+      </div>
+      <div class="logo center"><img :src="props.logo" alt="Logo Torneo" /></div>
+      <div class="info">
+        <div class="entrants">{{ props.tournamentName }}</div>
+        <div class="date">{{ formattedDate }}</div>
+      </div>
+    </div>
+    <div
+      v-if="characters.length"
+      class="top-8-container"
+      :style="{
+        '--primary-color': props.primaryColor,
+        '--secondary-color': props.secondaryColor,
+      }"
+    >
+      <div class="card card-1">
+        <div
+          class="render render_outside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(1)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(1)?.id!,
@@ -15,16 +33,18 @@
           bottom: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.bottom,
           backgroundPosition: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.backgroundPosition,
         }"
-      />
-      <div class="position">1</div>
-      <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}</div>
-    </div>
-    <div class="card card-2" :style="{ zIndex: 2 }">
-      <div
-        class="render render_outside"
-        :style="{
+        />
+        <div class="position">1</div>
+        <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
+        </div>
+      </div>
+      <!-- <div class="card card-2" :style="{ zIndex: 2 }">
+        <div
+          class="render render_outside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(2)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(2)?.id!,
@@ -35,18 +55,18 @@
           right: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.right,
           bottom: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.bottom,
         }"
-      />
-      <div class="position">2</div>
-      <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle">
-        <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
+        />
+        <div class="position">2</div>
+        <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
+        </div>
       </div>
-    </div>
-    <div class="card card-3" :style="{ zIndex: 3 }">
-      <div
-        class="render render_outside"
-        :style="{
+      <div class="card card-3" :style="{ zIndex: 3 }">
+        <div
+          class="render render_outside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(3)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(3)?.id!,
@@ -57,16 +77,18 @@
           right: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.right,
           bottom: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.bottom,
         }"
-      />
-      <div class="position">3</div>
-      <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}</div>
-    </div>
-    <div class="card card-4" :style="{ zIndex: 4 }">
-      <div
-        class="render render_outside"
-        :style="{
+        />
+        <div class="position">3</div>
+        <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}
+        </div>
+      </div>
+      <div class="card card-4" :style="{ zIndex: 4 }">
+        <div
+          class="render render_outside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(4)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(4)?.id!,
@@ -77,16 +99,18 @@
           right: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.right,
           bottom: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.bottom,
         }"
-      />
-      <div class="position">4</div>
-      <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}</div>
-    </div>
-    <div class="card card-5">
-      <div
-        class="render render_inside"
-        :style="{
+        />
+        <div class="position">4</div>
+        <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}
+        </div>
+      </div>
+      <div class="card card-5">
+        <div
+          class="render render_inside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(5)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(5)?.id!,
@@ -96,16 +120,18 @@
           height: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.backgroundPosition,
         }"
-      />
-      <div class="position">5</div>
-      <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}</div>
-    </div>
-    <div class="card card-5">
-      <div
-        class="render render_inside"
-        :style="{
+        />
+        <div class="position">5</div>
+        <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}
+        </div>
+      </div>
+      <div class="card card-5">
+        <div
+          class="render render_inside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(6)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(6)?.id!,
@@ -115,16 +141,18 @@
           height: getRenderSizes(getPlayerCharacter(6)?.id!, 6)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(6)?.id!, 5)?.backgroundPosition,
         }"
-      />
-      <div class="position">5</div>
-      <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}</div>
-    </div>
-    <div class="card card-7">
-      <div
-        class="render render_inside"
-        :style="{
+        />
+        <div class="position">5</div>
+        <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}
+        </div>
+      </div>
+      <div class="card card-7">
+        <div
+          class="render render_inside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(7)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(7)?.id!,
@@ -134,16 +162,18 @@
           height: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.backgroundPosition,
         }"
-      />
-      <div class="position">7</div>
-      <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}</div>
-    </div>
-    <div class="card card-7">
-      <div
-        class="render render_inside"
-        :style="{
+        />
+        <div class="position">7</div>
+        <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}
+        </div>
+      </div>
+      <div class="card card-7">
+        <div
+          class="render render_inside"
+          :style="{
           backgroundImage: renderImage(getPlayerCharacter(8)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(8)?.id!,
@@ -153,17 +183,24 @@
           height: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.backgroundPosition,
         }"
-      />
-      <div class="position">7</div>
-      <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
-      <div class="name-background" />
-      <div class="handle"><Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}</div>
+        />
+        <div class="position">7</div>
+        <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
+        <div class="name-background" />
+        <div class="handle">
+          <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
+        </div>
+      </div> -->
     </div>
   </div>
+  <button class="screenshot-btn" @click="saveHtmlToImagePNG">
+    Guardar top8
+  </button>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from "vue";
 import Twitter from "~/assets/icons/twitter.svg";
+import * as htmlToImage from 'html-to-image';
 
 interface Player {
   name: string;
@@ -173,20 +210,29 @@ interface Player {
 }
 
 // Recibe la prop players
-const props = defineProps<{ players: Player[] }>()
-
+const props = defineProps<{
+  players: Player[];
+  logo: string;
+  primaryColor: string;
+  secondaryColor: string;
+  tournamentDate: string;
+  tournamentName: string;
+}>();
+const top8Ref = ref<HTMLElement | null>(null);
 // Computed para characters con posición asignada
 const characters = computed(() =>
   props.players.map((player, idx) => ({
     ...player,
     position: idx + 1,
   }))
-)
+);
 
 // El resto del código puede seguir usando "characters" como antes
 const { data: charactersData } = await useAsyncData("characters", async () => {
   return await $fetch(
-    `/api/characters?ids=${characters.value.map((c) => c.characterID).join(",")}`
+    `/api/characters?ids=${characters.value
+      .map((c) => c.characterID)
+      .join(",")}`
   );
 });
 const getCharacterByID = (id: number) => {
@@ -226,11 +272,52 @@ const getRenderSizes = (characterID: number, position: number) => {
       return null;
   }
 };
+
+const formattedDate = computed(() => {
+  if (!props.tournamentDate) return "";
+  const date = new Date(props.tournamentDate);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+});
+
+import html2canvas from "html2canvas";
+
+const saveHtml2CanvasPNG = () => {
+  if (!top8Ref.value) return;
+  document.fonts.ready.then(() => {
+    html2canvas(top8Ref.value!, { backgroundColor: '#181824', useCORS: true }).then((canvas) => {
+      const link = document.createElement('a');
+      link.download = 'top8.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+};
+const saveHtmlToImagePNG = () => {
+  if (!top8Ref.value) return;
+  document.fonts.ready.then(() => {
+    htmlToImage.toPng(top8Ref.value!, { backgroundColor: '#181824', cacheBust: true, skipFonts: true })
+      .then((dataUrl: string) => {
+        const link = document.createElement('a');
+        link.download = 'top8.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error: any) => {
+        console.error('Error exportando PNG:', error);
+      });
+  });
+};
 </script>
 <style lang="scss">
+
 .render {
-  filter: drop-shadow(3px 8px 0 #ff42ec);
+  display:none;
+  filter: drop-shadow(3px 8px 0 var(--primary-color));
   background-repeat: no-repeat;
+  background-color: transparent;
   &_outside {
     position: absolute;
   }
@@ -243,8 +330,8 @@ const getRenderSizes = (characterID: number, position: number) => {
   max-width: 703px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: "Proxima Nova", "Arial", sans-serif;
-  padding-top: 10rem; // Only for demo purposes, adjust as needed
+  font-family: "Proxima Nova", Arial, sans-serif;
+  // padding-top: 10rem; // Only for demo purposes, adjust as needed
   .icon {
     width: 1.5rem;
     height: 1.5rem;
@@ -253,7 +340,7 @@ const getRenderSizes = (characterID: number, position: number) => {
   }
   .card {
     background: #1c1c3a;
-    border: 4px solid #ff42ec;
+    border: 4px solid var(--primary-color);
     color: white;
     border-radius: 1rem;
     width: 335px;
@@ -264,8 +351,7 @@ const getRenderSizes = (characterID: number, position: number) => {
     flex-direction: column;
     justify-content: flex-end;
     min-height: 5rem;
-    box-shadow: 0 0 10px rgba(255, 54, 195, 0.5);
-
+    
     .name {
       font-size: 3rem;
       font-weight: bold;
@@ -281,7 +367,7 @@ const getRenderSizes = (characterID: number, position: number) => {
       top: 0.5rem;
       left: 0.5rem;
       padding: 0.25rem 0.75rem;
-      font-family: "Proxima Nova Italic", "Arial", sans-serif;
+      font-family: "Proxima Nova Italic", Arial, sans-serif;
       font-weight: bold;
       color: #ffff;
     }
@@ -301,7 +387,7 @@ const getRenderSizes = (characterID: number, position: number) => {
           bottom: 2.5rem;
           width: 101%;
           height: 15%;
-          background: #ff42ec;
+          background: var(--primary-color);
           clip-path: polygon(-62% 100%, 100% 0, 100% 100%);
           z-index: -1;
           box-shadow: 0 4px 16px 0 rgba(255, 54, 195, 0.25);
@@ -349,7 +435,7 @@ const getRenderSizes = (characterID: number, position: number) => {
           bottom: 2.5rem;
           width: 101%;
           height: 25%;
-          background: #ff42ec;
+          background: var(--primary-color);
           clip-path: polygon(-15% 100%, 100% 0, 100% 100%);
           z-index: -1;
         }
@@ -359,7 +445,7 @@ const getRenderSizes = (characterID: number, position: number) => {
     .name-background {
       height: 0.6rem;
       margin-top: auto;
-      background: #ff42ec;
+      background: var(--primary-color);
       box-shadow: 0 4px 16px 0 rgba(255, 54, 195, 0.25);
       width: 100%;
       z-index: 1;
@@ -368,14 +454,87 @@ const getRenderSizes = (characterID: number, position: number) => {
     .handle {
       font-size: 1rem;
       color: #ccc;
-      background-color: #66195f;
+      background-color: var(--secondary-color);
       padding: 0.2rem 1rem;
       text-align: right;
       font-weight: bolder;
-      color: #ff42ec;
-      border-radius: 0 0 1rem 1rem;
+      color: var(--primary-color);
+      border-radius: 0 0 0.8rem 0.8rem;
       z-index: 1;
     }
   }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  gap: 2rem;
+  max-width: 703px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+.logo {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 33 auto;
+}
+.logo.center {
+  width: 140px; /* Puedes ajustar el tamaño del logo central */
+  flex: 25 auto;
+}
+.logo img {
+  max-width: 100%;
+  max-height: 80px;
+  object-fit: contain;
+}
+.info {
+  flex: auto;
+  z-index: 3;
+  text-align: left;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  .entrants,
+  .date {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    color: black;
+    border-radius: 1.5rem;
+  }
+}
+.top-8 {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+.screenshot-btn {
+  margin: 1rem auto 2rem auto;
+  display: block;
+  background: var(--primary-color, #ffee8c);
+  color: #232946;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px rgba(255, 238, 140, 0.18);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.screenshot-btn:hover {
+  background: #232946;
+  color: var(--primary-color, #ffee8c);
+  border: 1.5px solid var(--primary-color, #ffee8c);
 }
 </style>
