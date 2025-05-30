@@ -1,5 +1,5 @@
 <template>
-  <div ref="top8Ref" class="top-8" style="z-index: 100;position: relative;">
+  <div ref="top8Ref" id="my-node" class="top-8" style="position: relative">
     <div class="logo-container">
       <div class="logo left">
         <img :src="props.logo" alt="Logo Comunidad" />
@@ -11,6 +11,7 @@
       </div>
     </div>
     <div
+    
       v-if="characters.length"
       class="top-8-container"
       :style="{
@@ -41,7 +42,7 @@
           <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
         </div>
       </div>
-      <!-- <div class="card card-2" :style="{ zIndex: 2 }">
+      <div class="card card-2" :style="{ zIndex: 2 }">
         <div
           class="render render_outside"
           :style="{
@@ -190,7 +191,7 @@
         <div class="handle">
           <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
   <button class="screenshot-btn" @click="saveHtmlToImagePNG">
@@ -200,7 +201,8 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import Twitter from "~/assets/icons/twitter.svg";
-import * as htmlToImage from 'html-to-image';
+import * as htmlToImage from "html-to-image";
+import { saveAs } from "file-saver";
 
 interface Player {
   name: string;
@@ -282,39 +284,20 @@ const formattedDate = computed(() => {
   return `${day}-${month}-${year}`;
 });
 
-import html2canvas from "html2canvas";
-
-const saveHtml2CanvasPNG = () => {
-  if (!top8Ref.value) return;
-  document.fonts.ready.then(() => {
-    html2canvas(top8Ref.value!, { backgroundColor: '#181824', useCORS: true }).then((canvas) => {
-      const link = document.createElement('a');
-      link.download = 'top8.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  });
-};
 const saveHtmlToImagePNG = () => {
-  if (!top8Ref.value) return;
-  document.fonts.ready.then(() => {
-    htmlToImage.toPng(top8Ref.value!, { backgroundColor: '#181824', cacheBust: true, skipFonts: true })
-      .then((dataUrl: string) => {
-        const link = document.createElement('a');
-        link.download = 'top8.png';
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((error: any) => {
-        console.error('Error exportando PNG:', error);
-      });
-  });
+  const node = document.getElementById('my-node');
+  if (!node) return;
+  htmlToImage.toBlob(node, { backgroundColor: '#0f1021'})
+    .then(function (blob) {
+      if (blob) {
+        saveAs(blob, 'my-node.png');
+      }
+    });
+
 };
 </script>
 <style lang="scss">
-
 .render {
-  display:none;
   filter: drop-shadow(3px 8px 0 var(--primary-color));
   background-repeat: no-repeat;
   background-color: transparent;
@@ -325,10 +308,10 @@ const saveHtmlToImagePNG = () => {
 
 .top-8-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
   gap: 1rem;
-  max-width: 703px;
-  margin: 0 auto;
+  // margin: 0 auto;
   padding: 2rem;
   font-family: "Proxima Nova", Arial, sans-serif;
   // padding-top: 10rem; // Only for demo purposes, adjust as needed
@@ -351,7 +334,7 @@ const saveHtmlToImagePNG = () => {
     flex-direction: column;
     justify-content: flex-end;
     min-height: 5rem;
-    
+
     .name {
       font-size: 3rem;
       font-weight: bold;
