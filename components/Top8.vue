@@ -1,27 +1,30 @@
 <template>
-  <div ref="top8Ref" id="my-node" class="top-8" style="position: relative">
-    <div class="logo-container">
-      <div class="logo left">
-        <img src="/img/Logo.png" alt="Logo Comunidad" />
+  <div ref="top8Ref" class="top-8" style="position: relative">
+    <div id="my-node">
+      <div class="logo-container">
+        <div class="logo left">
+          <img src="/img/Logo.png" alt="Logo Comunidad" />
+        </div>
+        <div class="logo center" v-if="props.logo">
+          <img :src="props.logo" alt="Logo Torneo" />
+        </div>
+        <div class="info" v-if="props.tournamentName && props.tournamentDate">
+          <div class="entrants">{{ props.tournamentName }}</div>
+          <div class="date">{{ formattedDate }}</div>
+        </div>
       </div>
-      <div class="logo center" v-if="props.logo"><img :src="props.logo" alt="Logo Torneo" /></div>
-      <div class="info" v-if="props.tournamentName && props.tournamentDate">
-        <div class="entrants">{{ props.tournamentName }}</div>
-        <div class="date">{{ formattedDate }}</div>
-      </div>
-    </div>
-    <div
-      v-if="characters.length"
-      class="top-8-container"
-      :style="{
-        '--primary-color': props.primaryColor,
-        '--secondary-color': props.secondaryColor,
-      }"
-    >
-      <div class="card card-1">
-        <div
-          class="render render_outside"
-          :style="{
+      <div
+        v-if="characters.length"
+        class="top-8-container"
+        :style="{
+          '--primary-color': props.primaryColor,
+          '--secondary-color': props.secondaryColor,
+        }"
+      >
+        <div class="card card-1">
+          <div
+            class="render render_outside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(1)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(1)?.id!,
@@ -33,23 +36,23 @@
           bottom: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.bottom,
           backgroundPosition: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.backgroundPosition,
         }"
-        />
-        <div class="position">1</div>
-        <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
-        <div class="name-background" />
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[0]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">1</div>
+          <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
+          <div class="name-background" />
+          <div class="secondary-char">
+            <div v-for="(char, idx) in players[0]?.secondaryCharacters">
+              <img :src="`${getIconRoute(char)}`" class="char-icon" />
+            </div>
+          </div>
+          <div class="handle">
+            <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
           </div>
         </div>
-        <div class="handle">
-          <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
-        </div>
-      </div>
-      <div class="card card-2" :style="{ zIndex: 2 }">
-        <div
-          class="render render_outside"
-          :style="{
+        <div class="card card-2" :style="{ zIndex: 2 }">
+          <div
+            class="render render_outside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(2)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(2)?.id!,
@@ -60,23 +63,23 @@
           right: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.right,
           bottom: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.bottom,
         }"
-        />
-        <div class="position">2</div>
-        <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[1]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">2</div>
+          <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[1]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
-        </div>
-      </div>
-      <div class="card card-3" :style="{ zIndex: 3 }">
-        <div
-          class="render render_outside"
-          :style="{
+        <div class="card card-3" :style="{ zIndex: 3 }">
+          <div
+            class="render render_outside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(3)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(3)?.id!,
@@ -87,23 +90,23 @@
           right: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.right,
           bottom: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.bottom,
         }"
-        />
-        <div class="position">3</div>
-        <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[2]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">3</div>
+          <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[2]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}
-        </div>
-      </div>
-      <div class="card card-4" :style="{ zIndex: 4 }">
-        <div
-          class="render render_outside"
-          :style="{
+        <div class="card card-4" :style="{ zIndex: 4 }">
+          <div
+            class="render render_outside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(4)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(4)?.id!,
@@ -114,23 +117,23 @@
           right: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.right,
           bottom: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.bottom,
         }"
-        />
-        <div class="position">4</div>
-        <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[3]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">4</div>
+          <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[3]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}
-        </div>
-      </div>
-      <div class="card card-5">
-        <div
-          class="render render_inside"
-          :style="{
+        <div class="card card-5">
+          <div
+            class="render render_inside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(5)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(5)?.id!,
@@ -140,23 +143,23 @@
           height: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.backgroundPosition,
         }"
-        />
-        <div class="position">5</div>
-        <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[4]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">5</div>
+          <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[4]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}
-        </div>
-      </div>
-      <div class="card card-5">
-        <div
-          class="render render_inside"
-          :style="{
+        <div class="card card-5">
+          <div
+            class="render render_inside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(6)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(6)?.id!,
@@ -166,23 +169,23 @@
           height: getRenderSizes(getPlayerCharacter(6)?.id!, 6)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(6)?.id!, 5)?.backgroundPosition,
         }"
-        />
-        <div class="position">5</div>
-        <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[5]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">5</div>
+          <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[5]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}
-        </div>
-      </div>
-      <div class="card card-7">
-        <div
-          class="render render_inside"
-          :style="{
+        <div class="card card-7">
+          <div
+            class="render render_inside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(7)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(7)?.id!,
@@ -192,23 +195,23 @@
           height: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.backgroundPosition,
         }"
-        />
-        <div class="position">7</div>
-        <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[0]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">7</div>
+          <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[0]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}
           </div>
         </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}
-        </div>
-      </div>
-      <div class="card card-7">
-        <div
-          class="render render_inside"
-          :style="{
+        <div class="card card-7">
+          <div
+            class="render render_inside"
+            :style="{
           backgroundImage: renderImage(getPlayerCharacter(8)?.id!),
           backgroundSize: getRenderSizes(
             getPlayerCharacter(8)?.id!,
@@ -218,17 +221,18 @@
           height: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.height,
           backgroundPosition: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.backgroundPosition,
         }"
-        />
-        <div class="position">7</div>
-        <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
-        <div class="name-background" />
-        <div class="handle">
-        <div class="secondary-char">
-          <div v-for="(char, idx) in players[7]?.secondaryCharacters">
-            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          />
+          <div class="position">7</div>
+          <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
+          <div class="name-background" />
+          <div class="handle">
+            <div class="secondary-char">
+              <div v-for="(char, idx) in players[7]?.secondaryCharacters">
+                <img :src="`${getIconRoute(char)}`" class="char-icon" />
+              </div>
+            </div>
+            <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
           </div>
-        </div>
-          <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
         </div>
       </div>
     </div>
@@ -330,7 +334,7 @@ const formattedDate = computed(() => {
 });
 
 declare const InstallTrigger: any;
-let isFirefox = typeof InstallTrigger !== 'undefined';
+let isFirefox = typeof InstallTrigger !== "undefined";
 
 const saveHtmlToImagePNG = () => {
   const node = document.getElementById("my-node");
@@ -343,8 +347,6 @@ const saveHtmlToImagePNG = () => {
       }
     });
 };
-
-
 </script>
 <style lang="scss" scoped>
 .render {
