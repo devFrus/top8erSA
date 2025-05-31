@@ -4,7 +4,7 @@
       <div class="logo left">
         <img src="/img/Logo.png" alt="Logo Comunidad" />
       </div>
-      <div class="logo center"><img :src="props.logo" alt="Logo Torneo" /></div>
+      <div class="logo center" v-if="props.logo"><img :src="props.logo" alt="Logo Torneo" /></div>
       <div class="info" v-if="props.tournamentName && props.tournamentDate">
         <div class="entrants">{{ props.tournamentName }}</div>
         <div class="date">{{ formattedDate }}</div>
@@ -329,17 +329,22 @@ const formattedDate = computed(() => {
   return `${day}-${month}-${year}`;
 });
 
+declare const InstallTrigger: any;
+let isFirefox = typeof InstallTrigger !== 'undefined';
+
 const saveHtmlToImagePNG = () => {
   const node = document.getElementById("my-node");
   if (!node) return;
   htmlToImage
-    .toBlob(node, { backgroundColor: "#0f1021" })
+    .toBlob(node, { backgroundColor: "#0f1021", skipFonts: isFirefox })
     .then(function (blob) {
       if (blob) {
         saveAs(blob, "my-node.png");
       }
     });
 };
+
+
 </script>
 <style lang="scss" scoped>
 .render {
