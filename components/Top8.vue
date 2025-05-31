@@ -11,7 +11,6 @@
       </div>
     </div>
     <div
-    
       v-if="characters.length"
       class="top-8-container"
       :style="{
@@ -38,6 +37,11 @@
         <div class="position">1</div>
         <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
         <div class="name-background" />
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[0]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
         <div class="handle">
           <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
         </div>
@@ -61,6 +65,11 @@
         <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[1]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
         </div>
       </div>
@@ -83,6 +92,11 @@
         <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[2]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}
         </div>
       </div>
@@ -105,6 +119,11 @@
         <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[3]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}
         </div>
       </div>
@@ -126,6 +145,11 @@
         <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[4]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}
         </div>
       </div>
@@ -147,6 +171,11 @@
         <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[5]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}
         </div>
       </div>
@@ -168,6 +197,11 @@
         <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[0]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}
         </div>
       </div>
@@ -189,6 +223,11 @@
         <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
         <div class="name-background" />
         <div class="handle">
+        <div class="secondary-char">
+          <div v-for="(char, idx) in players[7]?.secondaryCharacters">
+            <img :src="`${getIconRoute(char)}`" class="char-icon" />
+          </div>
+        </div>
           <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
         </div>
       </div>
@@ -209,6 +248,7 @@ interface Player {
   position: number;
   handle: string;
   characterID: number;
+  secondaryCharacters?: string[];
 }
 
 // Recibe la prop players
@@ -237,6 +277,11 @@ const { data: charactersData } = await useAsyncData("characters", async () => {
       .join(",")}`
   );
 });
+const getIconRoute = (name: string) => {
+  return `/icons/32px-${name
+    .replaceAll(" ", "")
+    .replaceAll(".", "")}HeadSSBU.png`;
+};
 const getCharacterByID = (id: number) => {
   return charactersData.value?.find((c) => c.id === id);
 };
@@ -249,7 +294,7 @@ const getPlayerCharacter = (position: number) => {
 };
 const renderImage = (characterID: number) => {
   const character = charactersData.value?.find((c) => c.id === characterID);
-  return character ? `url("_nuxt/assets/renders/${character.image}")` : "";
+  return character ? `url("/renders/${character.image}")` : "";
 };
 
 const getRenderSizes = (characterID: number, position: number) => {
@@ -285,18 +330,18 @@ const formattedDate = computed(() => {
 });
 
 const saveHtmlToImagePNG = () => {
-  const node = document.getElementById('my-node');
+  const node = document.getElementById("my-node");
   if (!node) return;
-  htmlToImage.toBlob(node, { backgroundColor: '#0f1021'})
+  htmlToImage
+    .toBlob(node, { backgroundColor: "#0f1021" })
     .then(function (blob) {
       if (blob) {
-        saveAs(blob, 'my-node.png');
+        saveAs(blob, "my-node.png");
       }
     });
-
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .render {
   filter: drop-shadow(3px 8px 0 var(--primary-color));
   background-repeat: no-repeat;
@@ -455,7 +500,7 @@ const saveHtmlToImagePNG = () => {
   width: 100%;
   margin-bottom: 2rem;
   gap: 2rem;
-  max-width: 703px;
+  max-width: 705px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -468,15 +513,15 @@ const saveHtmlToImagePNG = () => {
 }
 .logo.center {
   width: 140px; /* Puedes ajustar el tamaño del logo central */
-  flex: 25 auto;
+  flex: 33 auto;
 }
 .logo img {
   max-width: 100%;
-  max-height: 80px;
+  max-height: 120px;
   object-fit: contain;
 }
 .info {
-  flex: auto;
+  flex: 33 auto;
   z-index: 3;
   text-align: left;
   min-width: 200px;
@@ -519,5 +564,19 @@ const saveHtmlToImagePNG = () => {
   background: #232946;
   color: var(--primary-color, #ffee8c);
   border: 1.5px solid var(--primary-color, #ffee8c);
+}
+
+.secondary-char {
+  position: absolute;
+  z-index: 2;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.2rem;
+}
+
+.char-icon {
+  width: 2rem;
+  height: 2rem;
 }
 </style>

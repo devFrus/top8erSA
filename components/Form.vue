@@ -65,9 +65,51 @@
               @keydown.enter.prevent="selectCharacter(idx, char.name)"
               @mouseover="player.activeSuggestion = cidx"
             >
-              <img :src="`_nuxt${getIconRoute(char.name)}`" class="icon"/> {{ char.name }}
+              <img :src="`${getIconRoute(char.name)}`" class="icon"/> {{ char.name }}
             </li>
           </ul>
+        </label>
+        <!-- Personajes secundarios -->
+        <label>
+          Personajes secundarios:
+          <div class="secondary-chars">
+            <div
+              v-for="(sec, sidx) in player.secondaryCharacters"
+              :key="sidx"
+              class="secondary-char"
+            >
+              <input
+                v-model="player.secondaryCharacters[sidx]"
+                type="text"
+                placeholder="Buscar personaje"
+                @input="filterSecondaryCharacters(idx, sidx)"
+                @focus="player.showSecondarySuggestions[sidx] = true"
+                @blur="hideSecondarySuggestions(idx, sidx)"
+                @keydown.down.prevent="moveSecondarySuggestion(idx, sidx, 1)"
+                @keydown.up.prevent="moveSecondarySuggestion(idx, sidx, -1)"
+                @keydown.enter.prevent="selectActiveSecondarySuggestion(idx, sidx)"
+                autocomplete="on"
+              />
+              <ul
+                v-if="player.showSecondarySuggestions[sidx] && player.filteredSecondaryCharacters[sidx]?.length"
+                class="suggestions"
+              >
+                <li
+                  v-for="(char, cidx) in player.filteredSecondaryCharacters[sidx]"
+                  :key="char.id"
+                  :tabindex="0"
+                  :class="{ active: player.activeSecondarySuggestion[sidx] === cidx }"
+                  @mousedown.prevent="selectSecondaryCharacter(idx, sidx, char.name)"
+                  @keydown.enter.prevent="selectSecondaryCharacter(idx, sidx, char.name)"
+                  @mouseover="player.activeSecondarySuggestion[sidx] = cidx"
+                >
+                  <img :src="`${getIconRoute(char.name)}`" class="icon"/> {{ char.name }}
+                </li>
+              </ul>
+              <button type="button" @click="removeSecondaryCharacter(idx, sidx)">X</button>
+            </div>
+            <button type="button" @click="addSecondaryCharacter(idx)">Añadir personaje secundario</button>
+          </div>
         </label>
       </div>
     </div>
@@ -101,9 +143,14 @@ interface PlayerForm {
   filteredCharacters: { id: number; name: string }[];
   showSuggestions: boolean;
   activeSuggestion: number;
+  // Secundarios
+  secondaryCharacters: string[];
+  filteredSecondaryCharacters: { id: number; name: string }[][];
+  showSecondarySuggestions: boolean[];
+  activeSecondarySuggestion: number[];
 }
 const getIconRoute = (name: string) => {
-  return `/assets/icons/32px-${name.replaceAll(" ", "").replaceAll(".", "")}HeadSSBU.png`;
+  return `/icons/32px-${name.replaceAll(" ", "").replaceAll(".", "")}HeadSSBU.png`;
 };
 const players = reactive<PlayerForm[]>(
   Array.from({ length: 8 }, () => ({
@@ -114,6 +161,10 @@ const players = reactive<PlayerForm[]>(
     filteredCharacters: allCharacters,
     showSuggestions: false,
     activeSuggestion: 0,
+    secondaryCharacters: [],
+    filteredSecondaryCharacters: [],
+    showSecondarySuggestions: [],
+    activeSecondarySuggestion: [],
   }))
 );
 
@@ -129,6 +180,7 @@ const secondaryColor = ref("#66195f");
 const tournamentName = ref("");
 const tournamentDate = ref("");
 
+// Logo
 function onLogoChange(event: Event) {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
@@ -145,6 +197,7 @@ function onLogoChange(event: Event) {
   }
 }
 
+// Autocompletado principal
 function filterCharacters(idx: number) {
   const search = players[idx].character.toLowerCase();
   players[idx].filteredCharacters = allCharacters.filter((c) =>
@@ -153,14 +206,12 @@ function filterCharacters(idx: number) {
   players[idx].showSuggestions = true;
   players[idx].activeSuggestion = 0;
 }
-
 function selectCharacter(idx: number, name: string) {
   players[idx].character = name;
   const found = allCharacters.find((c) => c.name === name);
   players[idx].characterID = found ? found.id : null;
   players[idx].showSuggestions = false;
 }
-
 function selectActiveSuggestion(idx: number) {
   const player = players[idx];
   if (
@@ -172,15 +223,12 @@ function selectActiveSuggestion(idx: number) {
     selectCharacter(idx, char.name);
   }
 }
-
 function moveSuggestion(idx: number, direction: number) {
   const player = players[idx];
   if (!player.showSuggestions || player.filteredCharacters.length === 0) return;
   player.activeSuggestion += direction;
   if (player.activeSuggestion < 0) player.activeSuggestion = player.filteredCharacters.length - 1;
   if (player.activeSuggestion >= player.filteredCharacters.length) player.activeSuggestion = 0;
-
-  // Hacer scroll al elemento activo
   nextTick(() => {
     const ul = document.querySelectorAll('.suggestions')[idx];
     if (ul) {
@@ -191,13 +239,79 @@ function moveSuggestion(idx: number, direction: number) {
     }
   });
 }
-
 function hideSuggestions(idx: number) {
   nextTick(() => {
     players[idx].showSuggestions = false;
   });
 }
 
+// Secundarios
+function addSecondaryCharacter(idx: number) {
+  players[idx].secondaryCharacters.push("");
+  players[idx].filteredSecondaryCharacters.push(allCharacters);
+  players[idx].showSecondarySuggestions.push(false);
+  players[idx].activeSecondarySuggestion.push(0);
+}
+function removeSecondaryCharacter(idx: number, sidx: number) {
+  players[idx].secondaryCharacters.splice(sidx, 1);
+  players[idx].filteredSecondaryCharacters.splice(sidx, 1);
+  players[idx].showSecondarySuggestions.splice(sidx, 1);
+  players[idx].activeSecondarySuggestion.splice(sidx, 1);
+}
+function filterSecondaryCharacters(idx: number, sidx: number) {
+  const search = players[idx].secondaryCharacters[sidx].toLowerCase();
+  players[idx].filteredSecondaryCharacters[sidx] = allCharacters.filter((c) =>
+    c.name.toLowerCase().includes(search)
+  );
+  players[idx].showSecondarySuggestions[sidx] = true;
+  players[idx].activeSecondarySuggestion[sidx] = 0;
+}
+function selectSecondaryCharacter(idx: number, sidx: number, name: string) {
+  // Evita duplicados entre secundarios y con el principal
+  if (
+    players[idx].secondaryCharacters.some((n, i) => n === name && i !== sidx) ||
+    players[idx].character === name
+  ) {
+    players[idx].showSecondarySuggestions[sidx] = false;
+    return;
+  }
+  players[idx].secondaryCharacters[sidx] = name;
+  players[idx].showSecondarySuggestions[sidx] = false;
+}
+function selectActiveSecondarySuggestion(idx: number, sidx: number) {
+  const arr = players[idx];
+  if (
+    arr.showSecondarySuggestions[sidx] &&
+    arr.filteredSecondaryCharacters[sidx]?.length > 0 &&
+    arr.activeSecondarySuggestion[sidx] >= 0
+  ) {
+    const char = arr.filteredSecondaryCharacters[sidx][arr.activeSecondarySuggestion[sidx]];
+    selectSecondaryCharacter(idx, sidx, char.name);
+  }
+}
+function moveSecondarySuggestion(idx: number, sidx: number, direction: number) {
+  const arr = players[idx];
+  if (!arr.showSecondarySuggestions[sidx] || arr.filteredSecondaryCharacters[sidx]?.length === 0) return;
+  arr.activeSecondarySuggestion[sidx] += direction;
+  if (arr.activeSecondarySuggestion[sidx] < 0) arr.activeSecondarySuggestion[sidx] = arr.filteredSecondaryCharacters[sidx].length - 1;
+  if (arr.activeSecondarySuggestion[sidx] >= arr.filteredSecondaryCharacters[sidx].length) arr.activeSecondarySuggestion[sidx] = 0;
+  nextTick(() => {
+    const ul = document.querySelectorAll('.secondary-chars')[idx]?.querySelectorAll('.suggestions')[sidx];
+    if (ul) {
+      const activeLi = ul.querySelectorAll('li')[arr.activeSecondarySuggestion[sidx]];
+      if (activeLi && typeof activeLi.scrollIntoView === 'function') {
+        activeLi.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  });
+}
+function hideSecondarySuggestions(idx: number, sidx: number) {
+  nextTick(() => {
+    players[idx].showSecondarySuggestions[sidx] = false;
+  });
+}
+
+// Envío
 function submitForm() {
   emit("formSubmitted", {
     players,
@@ -209,10 +323,10 @@ function submitForm() {
   });
 }
 
+// Rellenar aleatorio
 function getRandomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
-
 function fillRandom() {
   const randomNames = [
     "Pepe", "Juan", "Ana", "Luis", "Marta", "Sergio", "Lucía", "Carlos"
@@ -227,6 +341,16 @@ function fillRandom() {
     players[i].character = char ? char.name : "";
     players[i].characterID = char ? char.id : null;
     players[i].filteredCharacters = allCharacters;
+    // Secundarios aleatorios
+    players[i].secondaryCharacters = [];
+    const secCount = Math.floor(Math.random() * 3); // 0-2 secundarios
+    for (let j = 0; j < secCount; j++) {
+      const secChar = getRandomItem(allCharacters);
+      players[i].secondaryCharacters.push(secChar ? secChar.name : "");
+    }
+    players[i].filteredSecondaryCharacters = players[i].secondaryCharacters.map(() => allCharacters);
+    players[i].showSecondarySuggestions = players[i].secondaryCharacters.map(() => false);
+    players[i].activeSecondarySuggestion = players[i].secondaryCharacters.map(() => 0);
   }
   // Colores aleatorios
   primaryColor.value = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0");
@@ -360,6 +484,53 @@ input[type="text"]:focus {
 .suggestions li:hover,
 .suggestions li.active {
   background: var(--accent);
+  color: #232946;
+}
+
+.secondary-chars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.secondary-char {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.secondary-char input[type="text"] {
+  flex: 1;
+}
+.secondary-char button {
+  background: #393a56;
+  color: #ffee8c;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.secondary-char button:hover {
+  background: #ffee8c;
+  color: #232946;
+}
+
+.secondary-chars > button {
+  margin-top: 0.3rem;
+  background: #232946;
+  color: #ffee8c;
+  border: 1px solid #393a56;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.secondary-chars > button:hover {
+  background: #ffee8c;
   color: #232946;
 }
 
