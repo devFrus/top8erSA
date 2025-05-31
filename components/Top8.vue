@@ -2,10 +2,10 @@
   <div ref="top8Ref" id="my-node" class="top-8" style="position: relative">
     <div class="logo-container">
       <div class="logo left">
-        <img :src="props.logo" alt="Logo Comunidad" />
+        <img src="/img/Logo.png" alt="Logo Comunidad" />
       </div>
       <div class="logo center"><img :src="props.logo" alt="Logo Torneo" /></div>
-      <div class="info">
+      <div class="info" v-if="props.tournamentName && props.tournamentDate">
         <div class="entrants">{{ props.tournamentName }}</div>
         <div class="date">{{ formattedDate }}</div>
       </div>
