@@ -262,7 +262,7 @@
         start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
       </div>
     </div>
-  </div>
+
   <button
     class="screenshot-btn"
     :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
@@ -272,6 +272,8 @@
     <div v-if="loader" class="loader"></div>
     <div v-else>Guardar</div>
   </button>
+  </div>
+
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -402,6 +404,7 @@ const saveHtmlToImagePNG = () => {
 };
 </script>
 <style lang="scss" scoped>
+.top-8 { padding-bottom: 2rem;}
 .loader {
   width: 50px;
   aspect-ratio: 1;
@@ -636,18 +639,7 @@ const saveHtmlToImagePNG = () => {
   box-shadow: 0 2px 8px rgba(255, 238, 140, 0.18);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-  // &.mobile-button {
-  //   position: absolute;
-  //   bottom: 80rem;
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  //   z-index: 1000;
-  //   width: 90%;
-  //   max-width: 400px;
-  //   &.loading {
-  //     position: relative;
-  //   }
-  // }
+
 }
 .screenshot-btn:hover {
   background: #232946;
