@@ -7,6 +7,8 @@ export default defineNuxtConfig({
     head: {
       title: 'Top8SA',
       viewport: 'width=1024',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },]
     }
   }
 })
