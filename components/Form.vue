@@ -125,7 +125,7 @@
       </label>
       <label>
         Url del torneo:
-        <input type="text" v-model="tournamentUrl" />
+        <input type="text" v-model="tournamentUrl" placeholder="Ej: start.gg/vortex-14" />
       </label>
     </div>
     <button type="submit" class="submit-btn">Guardar Top 8</button>
