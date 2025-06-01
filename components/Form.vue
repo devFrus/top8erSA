@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="top8-form">
-  <div class="title" :class="{mobile: $device.isMobile}">El cojonudo Top 8 Generator</div>
+  <div class="title" :class="{mobile: $device.isMobile}">Smash Alicante Top 8 maker</div>
     <!-- Botón de autocompletar para pruebas -->
     <button type="button" class="fill-btn" @click="fillRandom">Rellenar aleatorio</button>
     <!-- Nuevo campo para subir logo del torneo -->
