@@ -1,6 +1,6 @@
 <template>
   <div ref="top8Ref" class="top-8" style="position: relative">
-    <div v-if="!$device.isDesktop && !loader" class="message">La preview no está disponible en móvil</div>
+    <!-- <div v-if="!$device.isDesktop && !loader" class="message">La preview no está disponible en móvil</div> -->
     <div id="my-node">
       <div v-if="$device.isDesktop || show" class="logo-container">
         <div class="logo left">
@@ -289,7 +289,7 @@ const characters = computed(() =>
     position: idx + 1,
   }))
 );
-const show = ref(false);
+const show = ref(true);
 const loader = ref(false);
 // El resto del código puede seguir usando "characters" como antes
 const { data: charactersData } = await useAsyncData("characters", async () => {
@@ -369,7 +369,7 @@ const saveHtmlToImagePNG = () => {
     })
     .finally(() => {
       setTimeout(() => {
-        show.value = false;
+        // show.value = false;
         loader.value = false;
       }, 1000);
     })
