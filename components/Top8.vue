@@ -404,7 +404,8 @@ const saveHtmlToImagePNG = () => {
 };
 </script>
 <style lang="scss" scoped>
-.top-8 { padding-bottom: 2rem;}
+.top-8 { padding-bottom: 2rem; }
+#my-node { padding-bottom: 2rem;}
 .loader {
   width: 50px;
   aspect-ratio: 1;
