@@ -2,5 +2,11 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['nuxt-svgo']
+  modules: ['nuxt-svgo', '@nuxtjs/device'],
+  app: {
+    head: {
+      title: 'Top8SA',
+      viewport: 'width=device-width, initial-scale=1',
+    }
+  }
 })

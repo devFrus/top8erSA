@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="top8-form">
-    <div class="title">El cojonudo Top 8 Generator</div>
+  <div class="title" :class="{mobile: $device.isMobile}">El cojonudo Top 8 Generator</div>
     <!-- Botón de autocompletar para pruebas -->
     <button type="button" class="fill-btn" @click="fillRandom">Rellenar aleatorio</button>
     <!-- Nuevo campo para subir logo del torneo -->
@@ -114,7 +114,7 @@
       </div>
     </div>
     <!-- NUEVOS CAMPOS ABAJO -->
-    <div class="tournament-fields">
+    <div class="tournament-fields" :class="{mobile: $device.isMobile}">
       <label>
         Nombre del torneo:
         <input type="text" v-model="tournamentName" placeholder="Ej: Ult. Vortex #14" />
@@ -122,6 +122,10 @@
       <label>
         Fecha del torneo:
         <input type="date" v-model="tournamentDate" />
+      </label>
+      <label>
+        Url del torneo:
+        <input type="text" v-model="tournamentUrl" />
       </label>
     </div>
     <button type="submit" class="submit-btn">Guardar Top 8</button>
@@ -179,6 +183,7 @@ const secondaryColor = ref("#66195f");
 // NUEVOS: estado para el nombre y fecha del torneo
 const tournamentName = ref("");
 const tournamentDate = ref("");
+const tournamentUrl = ref("");
 
 // Logo
 function onLogoChange(event: Event) {
@@ -320,6 +325,7 @@ function submitForm() {
     secondaryColor: secondaryColor.value,
     tournamentName: tournamentName.value,
     tournamentDate: tournamentDate.value,
+    tournamentUrl: tournamentUrl.value,
   });
 }
 
@@ -384,6 +390,9 @@ function fillRandom() {
   margin-bottom: 2rem;
   letter-spacing: 0.03em;
   text-shadow: 0 2px 16px #23294655;
+  &.mobile {
+    font-size: 3.5rem;
+  }
 }
 .icon {
   width: 1.5rem;
@@ -616,6 +625,9 @@ input[type="text"]:focus {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Igual que .players-grid */
   gap: 2rem 1.5rem;                      /* Igual que .players-grid */
+  &.mobile {
+    grid-template-columns: 1fr; /* En móviles, una sola columna */
+  }
 }
 .tournament-fields label {
   display: flex;

@@ -9,6 +9,7 @@
       :secondary-color="secondaryColor"
       :tournament-date="tournamentDate"
       :tournament-name="tournamentName"
+      :tournament-url="tournamentUrl"
     ></Top8>
   </div>
 </template>
@@ -22,6 +23,7 @@ const primaryColor = ref("#ffee8c");
 const secondaryColor = ref("#232946");
 const tournamentDate = ref(new Date().toISOString().split("T")[0]);
 const tournamentName = ref("Top 8 Tournament");
+const tournamentUrl = ref("");
 
 const handleForm = (submittedPlayers: any) => {
   players.value = submittedPlayers.players;
@@ -30,6 +32,7 @@ const handleForm = (submittedPlayers: any) => {
   secondaryColor.value = submittedPlayers.secondaryColor;
   tournamentDate.value = submittedPlayers.tournamentDate;
   tournamentName.value = submittedPlayers.tournamentName;
+  tournamentUrl.value = submittedPlayers.tournamentUrl;
   formFilled.value = true;
 };
 </script>

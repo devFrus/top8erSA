@@ -1,7 +1,8 @@
 <template>
   <div ref="top8Ref" class="top-8" style="position: relative">
+    <div v-if="!$device.isDesktop && !loader" class="message">La preview no está disponible en móvil</div>
     <div id="my-node">
-      <div class="logo-container">
+      <div v-if="$device.isDesktop || show" class="logo-container">
         <div class="logo left">
           <img src="/img/Logo.png" alt="Logo Comunidad" />
         </div>
@@ -14,7 +15,7 @@
         </div>
       </div>
       <div
-        v-if="characters.length"
+        v-if="characters.length && ($device.isDesktop || show)"
         class="top-8-container"
         :style="{
           '--primary-color': props.primaryColor,
@@ -235,18 +236,33 @@
           </div>
         </div>
       </div>
+      <div v-if="props.tournamentUrl && ($device.isDesktop || show)" class="tournamentUrl">
+        <Startgg class="icon" />
+        start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
+      </div>
     </div>
   </div>
-  <button class="screenshot-btn" @click="saveHtmlToImagePNG">
-    Guardar top8
+  <button class="screenshot-btn" :class="{'mobile-button': !$device.isDesktop, 'loading': loader}" @click="saveHtmlToImagePNG" :disabled="loader">
+  <div v-if="loader" class="loader"></div>
+  <div v-else>Guardar</div>
   </button>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import Twitter from "~/assets/icons/twitter.svg";
+import Startgg from "~/assets/icons/startgg.svg";
 import * as htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
 
+useHead({
+  title: "Top 8"
+});
+
+useHead({
+  meta: [
+    { name: 'viewport', content: 'width=1024' }
+  ]
+});
 interface Player {
   name: string;
   position: number;
@@ -258,11 +274,12 @@ interface Player {
 // Recibe la prop players
 const props = defineProps<{
   players: Player[];
-  logo: string;
+  logo?: string;
   primaryColor: string;
   secondaryColor: string;
-  tournamentDate: string;
-  tournamentName: string;
+  tournamentDate?: string;
+  tournamentName?: string;
+  tournamentUrl?: string;
 }>();
 const top8Ref = ref<HTMLElement | null>(null);
 // Computed para characters con posición asignada
@@ -272,7 +289,8 @@ const characters = computed(() =>
     position: idx + 1,
   }))
 );
-
+const show = ref(false);
+const loader = ref(false);
 // El resto del código puede seguir usando "characters" como antes
 const { data: charactersData } = await useAsyncData("characters", async () => {
   return await $fetch(
@@ -337,6 +355,9 @@ declare const InstallTrigger: any;
 let isFirefox = typeof InstallTrigger !== "undefined";
 
 const saveHtmlToImagePNG = () => {
+  show.value = true;
+  loader.value = true;
+  setTimeout(() =>{
   const node = document.getElementById("my-node");
   if (!node) return;
   htmlToImage
@@ -345,10 +366,35 @@ const saveHtmlToImagePNG = () => {
       if (blob) {
         saveAs(blob, "my-node.png");
       }
-    });
+    })
+    .finally(() => {
+      setTimeout(() => {
+        show.value = false;
+        loader.value = false;
+      }, 1000);
+    })
+  },1000)
+
 };
+
+
 </script>
 <style lang="scss" scoped>
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#ffa516);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 1s infinite linear;
+}
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
+}
 .render {
   filter: drop-shadow(3px 8px 0 var(--primary-color));
   background-repeat: no-repeat;
@@ -566,6 +612,18 @@ const saveHtmlToImagePNG = () => {
   box-shadow: 0 2px 8px rgba(255, 238, 140, 0.18);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
+  &.mobile-button {
+    position: absolute;
+    bottom: 80rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    &.loading {
+      position: relative;
+    }
+  }
 }
 .screenshot-btn:hover {
   background: #232946;
@@ -585,5 +643,30 @@ const saveHtmlToImagePNG = () => {
 .char-icon {
   width: 2rem;
   height: 2rem;
+}
+
+.tournamentUrl {
+  justify-content: center;;
+  font-size: 1.2rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  
+  svg {
+    margin-right: 1rem;
+  }
+  span {
+    font-weight: bold;
+  }
+}
+
+.message {
+  position: absolute;
+  top: 30rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
 }
 </style>
