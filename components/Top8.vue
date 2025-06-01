@@ -39,7 +39,9 @@
         }"
           />
           <div class="position">1</div>
-          <div class="name">{{ getPlayerByPosition(1)?.name }}</div>
+          <div class="name name-1">
+            {{ getPlayerByPosition(1)?.name }}
+          </div>
           <div class="name-background" />
           <div class="secondary-char">
             <div v-for="(char, idx) in players[0]?.secondaryCharacters">
@@ -47,7 +49,9 @@
             </div>
           </div>
           <div class="handle">
-            <Twitter class="icon" />{{ getPlayerByPosition(1)?.handle }}
+            <Twitter v-if="getPlayerByPosition(1)?.handle" class="icon" />{{
+              getPlayerByPosition(1)?.handle
+            }}
           </div>
         </div>
         <div class="card card-2" :style="{ zIndex: 2 }">
@@ -74,7 +78,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(2)?.handle }}
+            <Twitter v-if="getPlayerByPosition(2)?.handle" class="icon" />{{
+              getPlayerByPosition(2)?.handle
+            }}
           </div>
         </div>
         <div class="card card-3" :style="{ zIndex: 3 }">
@@ -101,7 +107,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(3)?.handle }}
+            <Twitter v-if="getPlayerByPosition(3)?.handle" class="icon" />{{
+              getPlayerByPosition(3)?.handle
+            }}
           </div>
         </div>
         <div class="card card-4" :style="{ zIndex: 4 }">
@@ -128,7 +136,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(4)?.handle }}
+            <Twitter v-if="getPlayerByPosition(4)?.handle" class="icon" />{{
+              getPlayerByPosition(4)?.handle
+            }}
           </div>
         </div>
         <div class="card card-5">
@@ -154,7 +164,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(5)?.handle }}
+            <Twitter v-if="getPlayerByPosition(5)?.handle" class="icon" />{{
+              getPlayerByPosition(5)?.handle
+            }}
           </div>
         </div>
         <div class="card card-5">
@@ -180,7 +192,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(6)?.handle }}
+            <Twitter v-if="getPlayerByPosition(6)?.handle" class="icon" />{{
+              getPlayerByPosition(6)?.handle
+            }}
           </div>
         </div>
         <div class="card card-7">
@@ -206,7 +220,9 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(7)?.handle }}
+            <Twitter v-if="getPlayerByPosition(7)?.handle" class="icon" />{{
+              getPlayerByPosition(7)?.handle
+            }}
           </div>
         </div>
         <div class="card card-7">
@@ -232,36 +248,45 @@
                 <img :src="`${getIconRoute(char)}`" class="char-icon" />
               </div>
             </div>
-            <Twitter class="icon" />{{ getPlayerByPosition(8)?.handle }}
+            <Twitter v-if="getPlayerByPosition(8)?.handle" class="icon" />{{
+              getPlayerByPosition(8)?.handle
+            }}
           </div>
         </div>
       </div>
-      <div v-if="props.tournamentUrl && ($device.isDesktop || show)" class="tournamentUrl">
+      <div
+        v-if="props.tournamentUrl && ($device.isDesktop || show)"
+        class="tournamentUrl"
+      >
         <Startgg class="icon" />
         start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
       </div>
     </div>
   </div>
-  <button class="screenshot-btn" :class="{'mobile-button': !$device.isDesktop, 'loading': loader}" @click="saveHtmlToImagePNG" :disabled="loader">
-  <div v-if="loader" class="loader"></div>
-  <div v-else>Guardar</div>
+  <button
+    class="screenshot-btn"
+    :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
+    @click="saveHtmlToImagePNG"
+    :disabled="loader"
+  >
+    <div v-if="loader" class="loader"></div>
+    <div v-else>Guardar</div>
   </button>
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import Twitter from "~/assets/icons/twitter.svg";
 import Startgg from "~/assets/icons/startgg.svg";
+import fitty from "fitty";
 import * as htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
 
-useHead({
-  title: "Top 8"
-});
-
-useHead({
-  meta: [
-    { name: 'viewport', content: 'width=1024' }
-  ]
+onMounted(() => {
+  // Ajusta el tamaño de los nombres de los jugadores
+  nextTick(() => {
+    fitty('.name', { minSize: 20, maxSize: 40 });
+    fitty('.name-1', { minSize: 30, maxSize: 56, multiLine: false });
+  });
 });
 interface Player {
   name: string;
@@ -357,43 +382,41 @@ let isFirefox = typeof InstallTrigger !== "undefined";
 const saveHtmlToImagePNG = () => {
   show.value = true;
   loader.value = true;
-  setTimeout(() =>{
-  const node = document.getElementById("my-node");
-  if (!node) return;
-  htmlToImage
-    .toBlob(node, { backgroundColor: "#0f1021", skipFonts: isFirefox })
-    .then(function (blob) {
-      if (blob) {
-        saveAs(blob, "my-node.png");
-      }
-    })
-    .finally(() => {
-      setTimeout(() => {
-        // show.value = false;
-        loader.value = false;
-      }, 1000);
-    })
-  },1000)
-
+  setTimeout(() => {
+    const node = document.getElementById("my-node");
+    if (!node) return;
+    htmlToImage
+      .toBlob(node, { backgroundColor: "#0f1021", skipFonts: isFirefox })
+      .then(function (blob) {
+        if (blob) {
+          saveAs(blob, "my-node.png");
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          // show.value = false;
+          loader.value = false;
+        }, 1000);
+      });
+  }, 1000);
 };
-
-
 </script>
 <style lang="scss" scoped>
-
 .loader {
   width: 50px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: 
-    radial-gradient(farthest-side,#ffa516 94%,#0000) top/8px 8px no-repeat,
-    conic-gradient(#0000 30%,#ffa516);
-  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-  mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  background: radial-gradient(farthest-side, #ffa516 94%, #0000) top/8px 8px
+      no-repeat,
+    conic-gradient(#0000 30%, #ffa516);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
   animation: l13 1s infinite linear;
 }
-@keyframes l13{ 
-  100%{transform: rotate(1turn)}
+@keyframes l13 {
+  100% {
+    transform: rotate(1turn);
+  }
 }
 .render {
   filter: drop-shadow(3px 8px 0 var(--primary-color));
@@ -410,7 +433,7 @@ const saveHtmlToImagePNG = () => {
   justify-content: center;
   gap: 1rem;
   // margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 0 4rem 0;
   font-family: "Proxima Nova", Arial, sans-serif;
   // padding-top: 10rem; // Only for demo purposes, adjust as needed
   .icon {
@@ -434,10 +457,11 @@ const saveHtmlToImagePNG = () => {
     min-height: 5rem;
 
     .name {
-      font-size: 3rem;
+      font-size: 2.5vw;
       font-weight: bold;
       color: #ffff;
       z-index: 2;
+      text-wrap: nowrap;
       position: absolute;
       bottom: 2rem;
       right: 2rem;
@@ -456,7 +480,7 @@ const saveHtmlToImagePNG = () => {
       grid-row: span 3;
       min-height: 30rem;
       .name {
-        font-size: 5rem;
+        font-size: 3.5vmin;
         bottom: 2.5rem;
         right: 1rem;
       }
@@ -646,12 +670,12 @@ const saveHtmlToImagePNG = () => {
 }
 
 .tournamentUrl {
-  justify-content: center;;
+  justify-content: center;
   font-size: 1.2rem;
   color: #fff;
   display: flex;
   align-items: center;
-  
+
   svg {
     margin-right: 1rem;
   }
