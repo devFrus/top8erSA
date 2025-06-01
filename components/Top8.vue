@@ -22,237 +22,24 @@
           '--secondary-color': props.secondaryColor,
         }"
       >
-        <div class="card card-1">
-          <div
-            class="render render_outside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(1)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(1)?.id!,
-            1
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.width,
-          height: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.height,
-          right: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.right,
-          bottom: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.bottom,
-          backgroundPosition: getRenderSizes(getPlayerCharacter(1)?.id!, 1)?.backgroundPosition,
-        }"
-          />
-          <div class="position">1</div>
-          <div class="name name-1">
-            {{ getPlayerByPosition(1)?.name }}
-          </div>
-          <div class="name-background" />
-          <div class="secondary-char">
-            <div v-for="(char, idx) in players[0]?.secondaryCharacters">
-              <img :src="`${getIconRoute(char)}`" class="char-icon" />
-            </div>
-          </div>
-          <div class="handle">
-            <Twitter v-if="getPlayerByPosition(1)?.handle" class="icon" />{{
-              getPlayerByPosition(1)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-2" :style="{ zIndex: 2 }">
-          <div
-            class="render render_outside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(2)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(2)?.id!,
-            2
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.width,
-          height: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.height,
-          right: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.right,
-          bottom: getRenderSizes(getPlayerCharacter(2)?.id!, 2)?.bottom,
-        }"
-          />
-          <div class="position">2</div>
-          <div class="name">{{ getPlayerByPosition(2)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[1]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(2)?.handle" class="icon" />{{
-              getPlayerByPosition(2)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-3" :style="{ zIndex: 3 }">
-          <div
-            class="render render_outside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(3)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(3)?.id!,
-            3
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.width,
-          height: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.height,
-          right: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.right,
-          bottom: getRenderSizes(getPlayerCharacter(3)?.id!, 3)?.bottom,
-        }"
-          />
-          <div class="position">3</div>
-          <div class="name">{{ getPlayerByPosition(3)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[2]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(3)?.handle" class="icon" />{{
-              getPlayerByPosition(3)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-4" :style="{ zIndex: 4 }">
-          <div
-            class="render render_outside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(4)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(4)?.id!,
-            4
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.width,
-          height: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.height,
-          right: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.right,
-          bottom: getRenderSizes(getPlayerCharacter(4)?.id!, 4)?.bottom,
-        }"
-          />
-          <div class="position">4</div>
-          <div class="name">{{ getPlayerByPosition(4)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[3]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(4)?.handle" class="icon" />{{
-              getPlayerByPosition(4)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-5">
-          <div
-            class="render render_inside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(5)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(5)?.id!,
-            5
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.width,
-          height: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.height,
-          backgroundPosition: getRenderSizes(getPlayerCharacter(5)?.id!, 5)?.backgroundPosition,
-        }"
-          />
-          <div class="position">5</div>
-          <div class="name">{{ getPlayerByPosition(5)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[4]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(5)?.handle" class="icon" />{{
-              getPlayerByPosition(5)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-5">
-          <div
-            class="render render_inside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(6)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(6)?.id!,
-            5
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(6)?.id!, 6)?.width,
-          height: getRenderSizes(getPlayerCharacter(6)?.id!, 6)?.height,
-          backgroundPosition: getRenderSizes(getPlayerCharacter(6)?.id!, 5)?.backgroundPosition,
-        }"
-          />
-          <div class="position">5</div>
-          <div class="name">{{ getPlayerByPosition(6)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[5]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(6)?.handle" class="icon" />{{
-              getPlayerByPosition(6)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-7">
-          <div
-            class="render render_inside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(7)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(7)?.id!,
-            7
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.width,
-          height: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.height,
-          backgroundPosition: getRenderSizes(getPlayerCharacter(7)?.id!, 7)?.backgroundPosition,
-        }"
-          />
-          <div class="position">7</div>
-          <div class="name">{{ getPlayerByPosition(7)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[0]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(7)?.handle" class="icon" />{{
-              getPlayerByPosition(7)?.handle
-            }}
-          </div>
-        </div>
-        <div class="card card-7">
-          <div
-            class="render render_inside"
-            :style="{
-          backgroundImage: renderImage(getPlayerCharacter(8)?.id!),
-          backgroundSize: getRenderSizes(
-            getPlayerCharacter(8)?.id!,
-            8
-          )?.backgroundSize,
-          width: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.width,
-          height: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.height,
-          backgroundPosition: getRenderSizes(getPlayerCharacter(8)?.id!, 8)?.backgroundPosition,
-        }"
-          />
-          <div class="position">7</div>
-          <div class="name">{{ getPlayerByPosition(8)?.name }}</div>
-          <div class="name-background" />
-          <div class="handle">
-            <div class="secondary-char">
-              <div v-for="(char, idx) in players[7]?.secondaryCharacters">
-                <img :src="`${getIconRoute(char)}`" class="char-icon" />
-              </div>
-            </div>
-            <Twitter v-if="getPlayerByPosition(8)?.handle" class="icon" />{{
-              getPlayerByPosition(8)?.handle
-            }}
-          </div>
-        </div>
+        <Card
+          v-for="pos in 8"
+          :key="pos"
+          :player="getPlayerByPosition(pos)"
+          :position="pos"
+          :renderClass="pos <= 4 ? 'render_outside' : 'render_inside'"
+          :renderStyle="{
+        backgroundImage: renderImage(getPlayerCharacter(pos)?.id!),
+        backgroundSize: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.backgroundSize,
+        width: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.width,
+        height: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.height,
+        right: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.right,
+        bottom: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.bottom,
+        backgroundPosition: getRenderSizes(getPlayerCharacter(pos)?.id!, pos)?.backgroundPosition,
+      }"
+          :nameClass="pos === 1 ? 'name-1' : ''"
+          :getIconRoute="getIconRoute"
+        />
       </div>
       <div
         v-if="props.tournamentUrl && ($device.isDesktop || show)"
@@ -263,17 +50,16 @@
       </div>
     </div>
 
-  <button
-    class="screenshot-btn"
-    :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
-    @click="saveHtmlToImagePNG"
-    :disabled="loader"
-  >
-    <div v-if="loader" class="loader"></div>
-    <div v-else>Guardar</div>
-  </button>
+    <button
+      class="screenshot-btn"
+      :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
+      @click="saveHtmlToImagePNG"
+      :disabled="loader"
+    >
+      <div v-if="loader" class="loader"></div>
+      <div v-else>Guardar</div>
+    </button>
   </div>
-
 </template>
 <script lang="ts" setup>
 import { computed, ref } from "vue";
@@ -286,8 +72,8 @@ import { saveAs } from "file-saver";
 onMounted(() => {
   // Ajusta el tamaño de los nombres de los jugadores
   nextTick(() => {
-    fitty('.name', { minSize: 20, maxSize: 40 });
-    fitty('.name-1', { minSize: 30, maxSize: 56, multiLine: false });
+    fitty(".name", { minSize: 20, maxSize: 40 });
+    fitty(".name-1", { minSize: 30, maxSize: 56, multiLine: false });
   });
 });
 interface Player {
@@ -404,8 +190,12 @@ const saveHtmlToImagePNG = () => {
 };
 </script>
 <style lang="scss" scoped>
-.top-8 { padding-bottom: 2rem; }
-#my-node { padding-bottom: 2rem;}
+.top-8 {
+  padding-bottom: 2rem;
+}
+#my-node {
+  padding-bottom: 2rem;
+}
 .loader {
   width: 50px;
   aspect-ratio: 1;
@@ -422,14 +212,6 @@ const saveHtmlToImagePNG = () => {
     transform: rotate(1turn);
   }
 }
-.render {
-  filter: drop-shadow(3px 8px 0 var(--primary-color));
-  background-repeat: no-repeat;
-  background-color: transparent;
-  &_outside {
-    position: absolute;
-  }
-}
 
 .top-8-container {
   display: grid;
@@ -440,138 +222,8 @@ const saveHtmlToImagePNG = () => {
   padding: 2rem 0 4rem 0;
   font-family: "Proxima Nova", Arial, sans-serif;
   // padding-top: 10rem; // Only for demo purposes, adjust as needed
-  .icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 0.2rem;
-    vertical-align: middle;
-  }
-  .card {
-    background: #1c1c3a;
-    border: 4px solid var(--primary-color);
-    color: white;
-    border-radius: 1rem;
-    width: 335px;
-    padding-top: 1rem 0;
-    text-align: center;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: 5rem;
 
-    .name {
-      font-size: 2.5vw;
-      font-weight: bold;
-      color: #ffff;
-      z-index: 2;
-      text-wrap: nowrap;
-      position: absolute;
-      bottom: 2rem;
-      right: 2rem;
-      text-shadow: 4px 4px rgba(100, 9, 75, 0.91);
-    }
-    .position {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      padding: 0.25rem 0.75rem;
-      font-family: "Proxima Nova Italic", Arial, sans-serif;
-      font-weight: bold;
-      color: #ffff;
-    }
-    &-1 {
-      grid-row: span 3;
-      min-height: 30rem;
-      .name {
-        font-size: 3.5vmin;
-        bottom: 2.5rem;
-        right: 1rem;
-      }
-      .name-background {
-        &::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: 2.5rem;
-          width: 101%;
-          height: 15%;
-          background: var(--primary-color);
-          clip-path: polygon(-62% 100%, 100% 0, 100% 100%);
-          z-index: -1;
-          box-shadow: 0 4px 16px 0 rgba(255, 54, 195, 0.25);
-        }
-      }
-      .position {
-        font-size: 6rem;
-      }
-    }
 
-    &-2,
-    &-3 {
-      min-height: 10.75rem;
-      .position {
-        font-size: 4rem;
-      }
-    }
-
-    &-4 {
-      min-height: 7.75rem;
-      .position {
-        font-size: 3.5rem;
-        top: 0;
-      }
-    }
-
-    &-5,
-    &-7 {
-      min-height: 6.85em;
-      .name {
-        font-size: 2.3rem;
-      }
-      .position {
-        font-size: 2.5rem;
-        top: 0;
-      }
-    }
-
-    &:not(.card-1) {
-      .name-background {
-        &::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: 2.5rem;
-          width: 101%;
-          height: 25%;
-          background: var(--primary-color);
-          clip-path: polygon(-15% 100%, 100% 0, 100% 100%);
-          z-index: -1;
-        }
-      }
-    }
-
-    .name-background {
-      height: 0.6rem;
-      margin-top: auto;
-      background: var(--primary-color);
-      box-shadow: 0 4px 16px 0 rgba(255, 54, 195, 0.25);
-      width: 100%;
-      z-index: 1;
-    }
-
-    .handle {
-      font-size: 1rem;
-      color: #ccc;
-      background-color: var(--secondary-color);
-      padding: 0.2rem 1rem;
-      text-align: right;
-      font-weight: bolder;
-      color: var(--primary-color);
-      border-radius: 0 0 0.8rem 0.8rem;
-      z-index: 1;
-    }
-  }
 }
 
 .logo-container {
@@ -640,7 +292,6 @@ const saveHtmlToImagePNG = () => {
   box-shadow: 0 2px 8px rgba(255, 238, 140, 0.18);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-
 }
 .screenshot-btn:hover {
   background: #232946;
@@ -648,19 +299,6 @@ const saveHtmlToImagePNG = () => {
   border: 1.5px solid var(--primary-color, #ffee8c);
 }
 
-.secondary-char {
-  position: absolute;
-  z-index: 2;
-  top: 0.5rem;
-  right: 0.5rem;
-  display: flex;
-  gap: 0.2rem;
-}
-
-.char-icon {
-  width: 2rem;
-  height: 2rem;
-}
 
 .tournamentUrl {
   justify-content: center;
