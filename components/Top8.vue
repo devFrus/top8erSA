@@ -39,6 +39,7 @@
       }"
           :nameClass="pos === 1 ? 'name-1' : ''"
           :getIconRoute="getIconRoute"
+          :cardStyle="{'z-index': pos}"
         />
       </div>
       <div
@@ -95,6 +96,7 @@ const props = defineProps<{
   tournamentDate?: string;
   tournamentName?: string;
   tournamentUrl?: string;
+  game?: string; // Añadido para manejar el juego
 }>();
 const top8Ref = ref<HTMLElement | null>(null);
 // Computed para characters con posición asignada
@@ -109,7 +111,7 @@ const loader = ref(false);
 // El resto del código puede seguir usando "characters" como antes
 const { data: charactersData } = await useAsyncData("characters", async () => {
   return await $fetch(
-    `/api/characters?ids=${characters.value
+    `/api/characters?game=${props.game}&ids=${characters.value
       .map((c) => c.characterID)
       .join(",")}`
   );
@@ -131,7 +133,7 @@ const getPlayerCharacter = (position: number) => {
 };
 const renderImage = (characterID: number) => {
   const character = charactersData.value?.find((c) => c.id === characterID);
-  return character ? `url("/renders/${character.image}")` : "";
+  return character ? `url("/renders/${props.game}/${character.image}")` : "";
 };
 
 const getRenderSizes = (characterID: number, position: number) => {

@@ -1,13 +1,15 @@
 import { characters } from "~/server/data/characters";
+import { charactersMelee } from "../data/charactersMelee";
 import { getQuery } from "h3";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
-  const id = parseInt(query.id as string, 10);
+  const game = query.game|| 'ultimate'; // Por defecto Smash Ultimate
   const idsParam = query.ids as Array<Int32Array>;
 
-  let filtered = characters;
-
+  let filtered = game === 'melee'  ? charactersMelee : characters;
+  console.log("Game selected:", game);
+  console.log(filtered)
   // ✅ Filtro por IDs
   if (idsParam) {
     const ids = idsParam

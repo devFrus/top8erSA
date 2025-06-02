@@ -1,145 +1,185 @@
 <template>
   <form @submit.prevent="submitForm" class="top8-form">
-  <div class="title" :class="{mobile: $device.isMobile}">Smash Alicante <br><span class="subtitle">Top 8 Maker</span></div>
-    <!-- Botón de autocompletar para pruebas -->
-    <button type="button" class="fill-btn" @click="fillRandom">Rellenar aleatorio</button>
-    <!-- Nuevo campo para subir logo del torneo -->
-    <div class="tournament-logo-field">
-      <label>
-        Logo del torneo:
-        <input type="file" accept="image/*" @change="onLogoChange" />
-      </label>
-      <div v-if="logoPreview" class="logo-preview">
-        <img :src="logoPreview" alt="Logo preview" />
+    <div class="title" :class="{ mobile: $device.isMobile }">
+      Smash Alicante <br /><span class="subtitle">Top 8 Maker</span>
+    </div>
+    <div v-if="!gameSelected" class="game-selection">
+      <GameCard @game="handleGameSelection" />
+    </div>
+    <div v-else>
+      <!-- Botón de autocompletar para pruebas -->
+      <button type="button" class="fill-btn" @click="fillRandom">
+        Rellenar aleatorio
+      </button>
+      <!-- Nuevo campo para subir logo del torneo -->
+      <div class="tournament-logo-field">
+        <label>
+          Logo del torneo:
+          <input type="file" accept="image/*" @change="onLogoChange" />
+        </label>
+        <div v-if="logoPreview" class="logo-preview">
+          <img :src="logoPreview" alt="Logo preview" />
+        </div>
       </div>
-    </div>
-    <!-- NUEVO: Color pickers -->
-    <div class="color-pickers">
-      <label>
-        Color primario:
-        <input type="color" v-model="primaryColor" />
-        <span class="color-value">{{ primaryColor }}</span>
-      </label>
-      <label>
-        Color secundario:
-        <input type="color" v-model="secondaryColor" />
-        <span class="color-value">{{ secondaryColor }}</span>
-      </label>
-    </div>
-    <div class="players-grid">
-      <div v-for="(player, idx) in players" :key="idx" class="player-form">
-        <h3>Jugador {{ idx + 1 }}</h3>
+      <!-- NUEVO: Color pickers -->
+      <div class="color-pickers">
         <label>
-          Nombre del jugador:
-          <input v-model="player.name" type="text" required />
+          Color primario:
+          <input type="color" v-model="primaryColor" />
+          <span class="color-value">{{ primaryColor }}</span>
         </label>
         <label>
-          Twitter handle:
-          <input v-model="player.handle" type="text" placeholder="@usuario" />
+          Color secundario:
+          <input type="color" v-model="secondaryColor" />
+          <span class="color-value">{{ secondaryColor }}</span>
         </label>
-        <label>
-          Personaje:
-          <input
-            v-model="player.character"
-            type="text"
-            placeholder="Buscar personaje"
-            @input="filterCharacters(idx)"
-            @focus="player.showSuggestions = true"
-            @blur="hideSuggestions(idx)"
-            @keydown.down.prevent="moveSuggestion(idx, 1)"
-            @keydown.up.prevent="moveSuggestion(idx, -1)"
-            @keydown.enter.prevent="selectActiveSuggestion(idx)"
-            autocomplete="on"
-            list="characters-list"
-          />
-          <ul
-            v-if="player.showSuggestions && player.filteredCharacters.length"
-            class="suggestions"
-          >
-            <li
-              v-for="(char, cidx) in player.filteredCharacters"
-              :key="char.id"
-              :tabindex="0"
-              :class="{ active: player.activeSuggestion === cidx }"
-              @mousedown.prevent="selectCharacter(idx, char.name)"
-              @keydown.enter.prevent="selectCharacter(idx, char.name)"
-              @mouseover="player.activeSuggestion = cidx"
+      </div>
+      <div class="players-grid">
+        <div v-for="(player, idx) in players" :key="idx" class="player-form">
+          <h3>Jugador {{ idx + 1 }}</h3>
+          <label>
+            Nombre del jugador:
+            <input v-model="player.name" type="text" required />
+          </label>
+          <label>
+            Twitter handle:
+            <input v-model="player.handle" type="text" placeholder="@usuario" />
+          </label>
+          <label>
+            Personaje:
+            <input
+              v-model="player.character"
+              type="text"
+              placeholder="Buscar personaje"
+              @input="filterCharacters(idx)"
+              @focus="player.showSuggestions = true"
+              @blur="hideSuggestions(idx)"
+              @keydown.down.prevent="moveSuggestion(idx, 1)"
+              @keydown.up.prevent="moveSuggestion(idx, -1)"
+              @keydown.enter.prevent="selectActiveSuggestion(idx)"
+              autocomplete="on"
+              list="characters-list"
+            />
+            <ul
+              v-if="player.showSuggestions && player.filteredCharacters.length"
+              class="suggestions"
             >
-              <img :src="`${getIconRoute(char.name)}`" class="icon"/> {{ char.name }}
-            </li>
-          </ul>
-        </label>
-        <!-- Personajes secundarios -->
-        <label>
-          Personajes secundarios:
-          <div class="secondary-chars">
-            <div
-              v-for="(sec, sidx) in player.secondaryCharacters"
-              :key="sidx"
-              class="secondary-char"
-            >
-              <input
-                v-model="player.secondaryCharacters[sidx]"
-                type="text"
-                placeholder="Buscar personaje"
-                @input="filterSecondaryCharacters(idx, sidx)"
-                @focus="player.showSecondarySuggestions[sidx] = true"
-                @blur="hideSecondarySuggestions(idx, sidx)"
-                @keydown.down.prevent="moveSecondarySuggestion(idx, sidx, 1)"
-                @keydown.up.prevent="moveSecondarySuggestion(idx, sidx, -1)"
-                @keydown.enter.prevent="selectActiveSecondarySuggestion(idx, sidx)"
-                autocomplete="on"
-              />
-              <ul
-                v-if="player.showSecondarySuggestions[sidx] && player.filteredSecondaryCharacters[sidx]?.length"
-                class="suggestions"
+              <li
+                v-for="(char, cidx) in player.filteredCharacters"
+                :key="char.id"
+                :tabindex="0"
+                :class="{ active: player.activeSuggestion === cidx }"
+                @mousedown.prevent="selectCharacter(idx, char.name)"
+                @keydown.enter.prevent="selectCharacter(idx, char.name)"
+                @mouseover="player.activeSuggestion = cidx"
               >
-                <li
-                  v-for="(char, cidx) in player.filteredSecondaryCharacters[sidx]"
-                  :key="char.id"
-                  :tabindex="0"
-                  :class="{ active: player.activeSecondarySuggestion[sidx] === cidx }"
-                  @mousedown.prevent="selectSecondaryCharacter(idx, sidx, char.name)"
-                  @keydown.enter.prevent="selectSecondaryCharacter(idx, sidx, char.name)"
-                  @mouseover="player.activeSecondarySuggestion[sidx] = cidx"
+                <img :src="`${getIconRoute(char.name)}`" class="icon" />
+                {{ char.name }}
+              </li>
+            </ul>
+          </label>
+          <!-- Personajes secundarios -->
+          <label>
+            Personajes secundarios:
+            <div class="secondary-chars">
+              <div
+                v-for="(sec, sidx) in player.secondaryCharacters"
+                :key="sidx"
+                class="secondary-char"
+              >
+                <input
+                  v-model="player.secondaryCharacters[sidx]"
+                  type="text"
+                  placeholder="Buscar personaje"
+                  @input="filterSecondaryCharacters(idx, sidx)"
+                  @focus="player.showSecondarySuggestions[sidx] = true"
+                  @blur="hideSecondarySuggestions(idx, sidx)"
+                  @keydown.down.prevent="moveSecondarySuggestion(idx, sidx, 1)"
+                  @keydown.up.prevent="moveSecondarySuggestion(idx, sidx, -1)"
+                  @keydown.enter.prevent="
+                    selectActiveSecondarySuggestion(idx, sidx)
+                  "
+                  autocomplete="on"
+                />
+                <ul
+                  v-if="
+                    player.showSecondarySuggestions[sidx] &&
+                    player.filteredSecondaryCharacters[sidx]?.length
+                  "
+                  class="suggestions"
                 >
-                  <img :src="`${getIconRoute(char.name)}`" class="icon"/> {{ char.name }}
-                </li>
-              </ul>
-              <button type="button" @click="removeSecondaryCharacter(idx, sidx)">X</button>
+                  <li
+                    v-for="(char, cidx) in player.filteredSecondaryCharacters[
+                      sidx
+                    ]"
+                    :key="char.id"
+                    :tabindex="0"
+                    :class="{
+                      active: player.activeSecondarySuggestion[sidx] === cidx,
+                    }"
+                    @mousedown.prevent="
+                      selectSecondaryCharacter(idx, sidx, char.name)
+                    "
+                    @keydown.enter.prevent="
+                      selectSecondaryCharacter(idx, sidx, char.name)
+                    "
+                    @mouseover="player.activeSecondarySuggestion[sidx] = cidx"
+                  >
+                    <img :src="`${getIconRoute(char.name)}`" class="icon" />
+                    {{ char.name }}
+                  </li>
+                </ul>
+                <button
+                  type="button"
+                  @click="removeSecondaryCharacter(idx, sidx)"
+                >
+                  X
+                </button>
+              </div>
+              <button type="button" @click="addSecondaryCharacter(idx)">
+                Añadir personaje secundario
+              </button>
             </div>
-            <button type="button" @click="addSecondaryCharacter(idx)">Añadir personaje secundario</button>
-          </div>
+          </label>
+        </div>
+      </div>
+      <!-- NUEVOS CAMPOS ABAJO -->
+      <div class="tournament-fields" :class="{ mobile: $device.isMobile }">
+        <label>
+          Nombre del torneo:
+          <input
+            type="text"
+            v-model="tournamentName"
+            placeholder="Ej: Ult. Vortex #14"
+          />
+        </label>
+        <label>
+          Fecha del torneo:
+          <input type="date" v-model="tournamentDate" />
+        </label>
+        <label>
+          Url del torneo:
+          <input
+            type="text"
+            v-model="tournamentUrl"
+            placeholder="Ej: start.gg/vortex-14"
+          />
+          <!-- NUEVO: Mensaje de error para URL -->
+          <span v-if="tournamentUrlError" class="error-msg"
+            >Formato incorrecto"</span
+          >
         </label>
       </div>
+      <button type="submit" class="submit-btn">Continuar</button>
     </div>
-    <!-- NUEVOS CAMPOS ABAJO -->
-    <div class="tournament-fields" :class="{mobile: $device.isMobile}">
-      <label>
-        Nombre del torneo:
-        <input type="text" v-model="tournamentName" placeholder="Ej: Ult. Vortex #14" />
-      </label>
-      <label>
-        Fecha del torneo:
-        <input type="date" v-model="tournamentDate" />
-      </label>
-      <label>
-        Url del torneo:
-        <input type="text" v-model="tournamentUrl" placeholder="Ej: start.gg/vortex-14" />
-        <!-- NUEVO: Mensaje de error para URL -->
-        <span v-if="tournamentUrlError" class="error-msg">Formato incorrecto"</span>
-      </label>
-    </div>
-    <button type="submit" class="submit-btn">Continuar</button>
   </form>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref, nextTick } from "vue";
 const emit = defineEmits(["formSubmitted"]);
-const { data: charactersData } = await useAsyncData("charactersList", async () => {
-  return await $fetch(`/api/characters`);
-});
+
+const charactersData = ref<{ id: number; name: string }[]>([]);
 const allCharacters = charactersData.value || [];
 interface PlayerForm {
   name: string;
@@ -156,7 +196,9 @@ interface PlayerForm {
   activeSecondarySuggestion: number[];
 }
 const getIconRoute = (name: string) => {
-  return `/icons/32px-${name.replaceAll(" ", "").replaceAll(".", "")}HeadSSBU.png`;
+  return `/icons/32px-${name
+    .replaceAll(" ", "")
+    .replaceAll(".", "")}HeadSSBU.png`;
 };
 const players = reactive<PlayerForm[]>(
   Array.from({ length: 8 }, () => ({
@@ -174,6 +216,8 @@ const players = reactive<PlayerForm[]>(
   }))
 );
 
+// NUEVO: Elegir juego
+const gameSelected = ref(""); // Por defecto Smash Ultimate
 // Nuevo: estado para el logo
 const logoFile = ref<File | null>(null);
 const logoPreview = ref<string | null>(null);
@@ -195,9 +239,30 @@ function validateTournamentUrl() {
     return;
   }
   // Si tiene contenido, valida el formato
-  tournamentUrlError.value = !/^start\.gg\/[a-zA-Z0-9\-_]+$/i.test(tournamentUrl.value.trim());
+  tournamentUrlError.value = !/^start\.gg\/[a-zA-Z0-9\-_]+$/i.test(
+    tournamentUrl.value.trim()
+  );
 }
-
+const handleGameSelection = (game: string) => {
+  gameSelected.value = game;
+  // Cargar los personajes del juego seleccionado
+  useAsyncData("charactersList", async () => {
+    return await $fetch(`/api/characters?game=${game}`);
+  }).then(({ data }) => {
+    charactersData.value = data.value || [];
+    allCharacters.splice(0, allCharacters.length, ...charactersData.value);
+    // Reiniciar los personajes de los jugadores
+    players.forEach((player) => {
+      player.filteredCharacters = allCharacters;
+      player.characterID = null;
+      player.character = "";
+      player.secondaryCharacters = [];
+      player.filteredSecondaryCharacters = [];
+      player.showSecondarySuggestions = [];
+      player.activeSecondarySuggestion = [];
+    });
+  });
+}
 // Logo
 function onLogoChange(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -245,14 +310,16 @@ function moveSuggestion(idx: number, direction: number) {
   const player = players[idx];
   if (!player.showSuggestions || player.filteredCharacters.length === 0) return;
   player.activeSuggestion += direction;
-  if (player.activeSuggestion < 0) player.activeSuggestion = player.filteredCharacters.length - 1;
-  if (player.activeSuggestion >= player.filteredCharacters.length) player.activeSuggestion = 0;
+  if (player.activeSuggestion < 0)
+    player.activeSuggestion = player.filteredCharacters.length - 1;
+  if (player.activeSuggestion >= player.filteredCharacters.length)
+    player.activeSuggestion = 0;
   nextTick(() => {
-    const ul = document.querySelectorAll('.suggestions')[idx];
+    const ul = document.querySelectorAll(".suggestions")[idx];
     if (ul) {
-      const activeLi = ul.querySelectorAll('li')[player.activeSuggestion];
-      if (activeLi && typeof activeLi.scrollIntoView === 'function') {
-        activeLi.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      const activeLi = ul.querySelectorAll("li")[player.activeSuggestion];
+      if (activeLi && typeof activeLi.scrollIntoView === "function") {
+        activeLi.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
     }
   });
@@ -261,8 +328,17 @@ function hideSuggestions(idx: number) {
   nextTick(() => {
     players[idx].showSuggestions = false;
   });
+async function handleGame(game: string) {
+  gameSelected.value = game;
+  const { data } = await useAsyncData(
+    "charactersList",
+    async () => {
+      return await $fetch(`/api/characters?game=${gameSelected.value}`);
+    }
+  );
+  charactersData.value = data.value || [];
 }
-
+}
 // Secundarios
 function addSecondaryCharacter(idx: number) {
   players[idx].secondaryCharacters.push("");
@@ -303,22 +379,38 @@ function selectActiveSecondarySuggestion(idx: number, sidx: number) {
     arr.filteredSecondaryCharacters[sidx]?.length > 0 &&
     arr.activeSecondarySuggestion[sidx] >= 0
   ) {
-    const char = arr.filteredSecondaryCharacters[sidx][arr.activeSecondarySuggestion[sidx]];
+    const char =
+      arr.filteredSecondaryCharacters[sidx][
+        arr.activeSecondarySuggestion[sidx]
+      ];
     selectSecondaryCharacter(idx, sidx, char.name);
   }
 }
 function moveSecondarySuggestion(idx: number, sidx: number, direction: number) {
   const arr = players[idx];
-  if (!arr.showSecondarySuggestions[sidx] || arr.filteredSecondaryCharacters[sidx]?.length === 0) return;
+  if (
+    !arr.showSecondarySuggestions[sidx] ||
+    arr.filteredSecondaryCharacters[sidx]?.length === 0
+  )
+    return;
   arr.activeSecondarySuggestion[sidx] += direction;
-  if (arr.activeSecondarySuggestion[sidx] < 0) arr.activeSecondarySuggestion[sidx] = arr.filteredSecondaryCharacters[sidx].length - 1;
-  if (arr.activeSecondarySuggestion[sidx] >= arr.filteredSecondaryCharacters[sidx].length) arr.activeSecondarySuggestion[sidx] = 0;
+  if (arr.activeSecondarySuggestion[sidx] < 0)
+    arr.activeSecondarySuggestion[sidx] =
+      arr.filteredSecondaryCharacters[sidx].length - 1;
+  if (
+    arr.activeSecondarySuggestion[sidx] >=
+    arr.filteredSecondaryCharacters[sidx].length
+  )
+    arr.activeSecondarySuggestion[sidx] = 0;
   nextTick(() => {
-    const ul = document.querySelectorAll('.secondary-chars')[idx]?.querySelectorAll('.suggestions')[sidx];
+    const ul = document
+      .querySelectorAll(".secondary-chars")
+      [idx]?.querySelectorAll(".suggestions")[sidx];
     if (ul) {
-      const activeLi = ul.querySelectorAll('li')[arr.activeSecondarySuggestion[sidx]];
-      if (activeLi && typeof activeLi.scrollIntoView === 'function') {
-        activeLi.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      const activeLi =
+        ul.querySelectorAll("li")[arr.activeSecondarySuggestion[sidx]];
+      if (activeLi && typeof activeLi.scrollIntoView === "function") {
+        activeLi.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
     }
   });
@@ -341,6 +433,7 @@ function submitForm() {
     tournamentName: tournamentName.value,
     tournamentDate: tournamentDate.value,
     tournamentUrl: tournamentUrl.value,
+    game: gameSelected.value, // Añadido para enviar el juego seleccionado
   });
 }
 
@@ -350,13 +443,28 @@ function getRandomItem<T>(arr: T[]): T {
 }
 function fillRandom() {
   const randomNames = [
-    "Pepe", "Juan", "Ana", "Luis", "Marta", "Sergio", "Lucía", "Carlos"
+    "Pepe",
+    "Juan",
+    "Ana",
+    "Luis",
+    "Marta",
+    "Sergio",
+    "Lucía",
+    "Carlos",
   ];
   const randomHandles = [
-    "@pepe", "@juan", "@ana", "@luis", "@marta", "@sergio", "@lucia", "@carlos"
+    "@pepe",
+    "@juan",
+    "@ana",
+    "@luis",
+    "@marta",
+    "@sergio",
+    "@lucia",
+    "@carlos",
   ];
   for (let i = 0; i < players.length; i++) {
-    players[i].name = randomNames[i % randomNames.length] + (Math.floor(Math.random() * 100));
+    players[i].name =
+      randomNames[i % randomNames.length] + Math.floor(Math.random() * 100);
     players[i].handle = randomHandles[i % randomHandles.length];
     const char = getRandomItem(allCharacters);
     players[i].character = char ? char.name : "";
@@ -369,13 +477,27 @@ function fillRandom() {
       const secChar = getRandomItem(allCharacters);
       players[i].secondaryCharacters.push(secChar ? secChar.name : "");
     }
-    players[i].filteredSecondaryCharacters = players[i].secondaryCharacters.map(() => allCharacters);
-    players[i].showSecondarySuggestions = players[i].secondaryCharacters.map(() => false);
-    players[i].activeSecondarySuggestion = players[i].secondaryCharacters.map(() => 0);
+    players[i].filteredSecondaryCharacters = players[i].secondaryCharacters.map(
+      () => allCharacters
+    );
+    players[i].showSecondarySuggestions = players[i].secondaryCharacters.map(
+      () => false
+    );
+    players[i].activeSecondarySuggestion = players[i].secondaryCharacters.map(
+      () => 0
+    );
   }
   // Colores aleatorios
-  primaryColor.value = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0");
-  secondaryColor.value = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, "0");
+  primaryColor.value =
+    "#" +
+    Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, "0");
+  secondaryColor.value =
+    "#" +
+    Math.floor(Math.random() * 16777215)
+      .toString(16)
+      .padStart(6, "0");
 }
 </script>
 
@@ -396,6 +518,11 @@ function fillRandom() {
 </style>
 
 <style scoped>
+.game-selection {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
 .title {
   font-family: "Proxima Nova", sans-serif;
   font-weight: 900;
@@ -409,9 +536,9 @@ function fillRandom() {
   transition: background 0.3s, color 0.3s;
   user-select: none;
   .subtitle {
-    border-top:#ffee8c 4px solid;
+    border-top: #ffee8c 4px solid;
     text-shadow: 4px 3px 2px rgba(231, 235, 7, 0.929);
-    color: #2269EC;
+    color: #2269ec;
   }
 }
 .title.mobile {
@@ -649,7 +776,7 @@ input[type="text"]:focus {
   margin-top: 2rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Igual que .players-grid */
-  gap: 2rem 1.5rem;                      /* Igual que .players-grid */
+  gap: 2rem 1.5rem; /* Igual que .players-grid */
   &.mobile {
     grid-template-columns: 1fr; /* En móviles, una sola columna */
   }

@@ -2,7 +2,7 @@
   <div class="background">
     <Form v-show="!formFilled" @form-submitted="handleForm"></Form>
     <Top8
-      v-show="formFilled"
+      v-if="formFilled"
       :players="players"
       :logo="logo"
       :primary-color="primaryColor"
@@ -10,7 +10,7 @@
       :tournament-date="tournamentDate"
       :tournament-name="tournamentName"
       :tournament-url="tournamentUrl"
-
+      :game="gameSelected"
       @back="formFilled = false"
     ></Top8>
   </div>
@@ -26,6 +26,7 @@ const secondaryColor = ref("#232946");
 const tournamentDate = ref(new Date().toISOString().split("T")[0]);
 const tournamentName = ref("Top 8 Tournament");
 const tournamentUrl = ref("");
+const gameSelected = ref("");
 
 const handleForm = (submittedPlayers: any) => {
   players.value = submittedPlayers.players;
@@ -35,6 +36,7 @@ const handleForm = (submittedPlayers: any) => {
   tournamentDate.value = submittedPlayers.tournamentDate;
   tournamentName.value = submittedPlayers.tournamentName;
   tournamentUrl.value = submittedPlayers.tournamentUrl;
+  gameSelected.value = submittedPlayers.game;
   formFilled.value = true;
 };
 </script>
