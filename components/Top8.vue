@@ -39,36 +39,39 @@
       }"
           :nameClass="pos === 1 ? 'name-1' : ''"
           :getIconRoute="getIconRoute"
-          :cardStyle="{'z-index': pos}"
+          :cardStyle="{ 'z-index': pos }"
         />
       </div>
-      <div
-        v-if="props.tournamentUrl && ($device.isDesktop || show)"
-        class="tournamentUrl"
-      >
-        <Startgg class="icon" />
-        start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
-      </div>
-      <div class="credits">
-        <span>Programado por:</span>
-        <a
-          href="https://twitter.com/kete_smush"
-          target="_blank"
-          rel="noopener noreferrer"
+
+      <div class="footer-text">
+        <div
+          v-if="props.tournamentUrl && ($device.isDesktop || show)"
+          class="tournamentUrl"
         >
-          <Twitter class="icon" />
-          kete_smush
-        </a>
-        <br />
-        <span>Diseñado por:</span>
-        <a
-          href="https://twitter.com/Joseluisasdfg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Twitter class="icon" />
-          Joseluisasdfg
-        </a>
+          <Startgg class="icon" />
+          start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
+        </div>
+        <div class="credits">
+          <span>Programado por:</span>
+          <a
+            href="https://twitter.com/kete_smush"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Twitter class="icon" />
+            kete_smush
+          </a>
+          <br />
+          <span>Diseñado por:</span>
+          <a
+            href="https://twitter.com/Joseluisasdfg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Twitter class="icon" />
+            Joseluisasdfg
+          </a>
+        </div>
       </div>
     </div>
 
@@ -86,8 +89,8 @@
       class="back-btn"
       :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
       @click="$emit('back')"
->
-     Atrás
+    >
+      Atrás
     </button>
   </div>
 </template>
@@ -98,7 +101,6 @@ import Startgg from "~/assets/icons/startgg.svg";
 
 import * as htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
-
 
 interface Player {
   name: string;
@@ -222,7 +224,7 @@ const saveHtmlToImagePNG = () => {
   padding-bottom: 2rem;
 }
 .loader {
-  width: 50px;
+  width: 20px;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(farthest-side, #ffa516 94%, #0000) top/8px 8px
@@ -247,8 +249,6 @@ const saveHtmlToImagePNG = () => {
   padding: 2rem 0 4rem 0;
   font-family: "Proxima Nova", Arial, sans-serif;
   // padding-top: 10rem; // Only for demo purposes, adjust as needed
-
-
 }
 
 .logo-container {
@@ -321,14 +321,13 @@ const saveHtmlToImagePNG = () => {
 .screenshot-btn:hover {
   background: #232946;
   color: var(--primary-color, #ffee8c);
-  
+
   border: 1px solid var(--primary-color, #ffee8c);
 }
 
-
 .tournamentUrl {
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #fff;
   display: flex;
   align-items: center;
@@ -370,7 +369,7 @@ const saveHtmlToImagePNG = () => {
 
 .credits {
   text-align: right;
-  padding: 2rem 10rem 2rem;
+
   color: #fff;
   font-size: 1.2rem;
   span {
@@ -380,7 +379,7 @@ const saveHtmlToImagePNG = () => {
     color: #ffee8c;
     text-decoration: none;
     font-weight: bold;
-    // display: flex;
+
     align-items: center;
     gap: 0.5rem;
     svg {
@@ -388,5 +387,12 @@ const saveHtmlToImagePNG = () => {
       height: 1.2rem;
     }
   }
+}
+
+.footer-text {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0 10rem;
 }
 </style>
