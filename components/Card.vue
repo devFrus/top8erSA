@@ -67,7 +67,6 @@ const props = defineProps<{
   min-height: 5rem;
 
   .name {
-    // font-size: 2.5vw;
     font-weight: bold;
     color: #fff;
     z-index: 3;
