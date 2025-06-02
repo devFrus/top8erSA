@@ -4,7 +4,7 @@
       :class="['render', renderClass]"
       :style="renderStyle"
     />
-    <div class="position">{{ position }}</div>
+    <div class="position">{{ realPosition }}</div>
     <div :class="['name', nameClass]">{{ player?.name }}</div>
     <div class="name-background" />
     <div class="secondary-char" v-if="player?.secondaryCharacters?.length">
@@ -27,6 +27,10 @@ onMounted(() => {
     fitty(".name", { minSize: 20, maxSize: 40 });
     fitty(".name-1", { minSize: 30, maxSize: 56, multiLine: false });
   });
+});
+
+const realPosition = computed(() => {
+  return props.position === 6 ? 5 : props.position === 8 ? 7 : props.position;
 });
 const props = defineProps<{
   player: any;
