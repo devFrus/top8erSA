@@ -49,6 +49,27 @@
         <Startgg class="icon" />
         start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
       </div>
+      <div class="credits">
+        <span>Programado por:</span>
+        <a
+          href="https://twitter.com/kete_smush"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Twitter class="icon" />
+          kete_smush
+        </a>
+        <br />
+        <span>Diseñado por:</span>
+        <a
+          href="https://twitter.com/kete_smush"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Twitter class="icon" />
+          Joseluisasdfg
+        </a>
+      </div>
     </div>
 
     <button
@@ -345,5 +366,27 @@ const saveHtmlToImagePNG = () => {
   color: #fff;
   font-size: 2rem;
   text-align: center;
+}
+
+.credits {
+  text-align: right;
+  padding: 2rem 10rem 2rem;
+  color: #fff;
+  font-size: 1.2rem;
+  span {
+    margin-right: 0.5rem;
+  }
+  a {
+    color: #ffee8c;
+    text-decoration: none;
+    font-weight: bold;
+    // display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
 }
 </style>

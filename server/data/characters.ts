@@ -1047,7 +1047,7 @@ export const characters: Character[] = [
       },
       top7: {
         backgroundSize: "9rem",
-        backgroundPosition: "-5rem -2rem",
+        backgroundPosition: "5rem -2rem",
         width: "342px",
         height: "67px",
       },
