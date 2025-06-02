@@ -171,6 +171,7 @@
         </label>
       </div>
       <button type="submit" class="submit-btn">Continuar</button>
+      <button class="back-btn" @click="clearData">Atrás</button>
     </div>
   </form>
 </template>
@@ -215,7 +216,32 @@ const players = reactive<PlayerForm[]>(
     activeSecondarySuggestion: [],
   }))
 );
-
+// Función para limpiar los datos del formulario
+function clearData() {
+  gameSelected.value = "";
+  players.forEach((player) => {
+    player.name = "";
+    player.handle = "";
+    player.character = "";
+    player.characterID = null;
+    player.filteredCharacters = allCharacters;
+    player.showSuggestions = false;
+    player.activeSuggestion = 0;
+    // Limpiar secundarios
+    player.secondaryCharacters = [];
+    player.filteredSecondaryCharacters = [];
+    player.showSecondarySuggestions = [];
+    player.activeSecondarySuggestion = [];
+  });
+  logoFile.value = null;
+  logoPreview.value = null;
+  primaryColor.value = "#ff42ec";
+  secondaryColor.value = "#66195f";
+  tournamentName.value = "";
+  tournamentDate.value = "";
+  tournamentUrl.value = "";
+  tournamentUrlError.value = false;
+}
 // NUEVO: Elegir juego
 const gameSelected = ref(""); // Por defecto Smash Ultimate
 // Nuevo: estado para el logo
@@ -262,7 +288,7 @@ const handleGameSelection = (game: string) => {
       player.activeSecondarySuggestion = [];
     });
   });
-}
+};
 // Logo
 function onLogoChange(event: Event) {
   const target = event.target as HTMLInputElement;
@@ -328,16 +354,13 @@ function hideSuggestions(idx: number) {
   nextTick(() => {
     players[idx].showSuggestions = false;
   });
-async function handleGame(game: string) {
-  gameSelected.value = game;
-  const { data } = await useAsyncData(
-    "charactersList",
-    async () => {
+  async function handleGame(game: string) {
+    gameSelected.value = game;
+    const { data } = await useAsyncData("charactersList", async () => {
       return await $fetch(`/api/characters?game=${gameSelected.value}`);
-    }
-  );
-  charactersData.value = data.value || [];
-}
+    });
+    charactersData.value = data.value || [];
+  }
 }
 // Secundarios
 function addSecondaryCharacter(idx: number) {
@@ -831,6 +854,25 @@ input[type="text"]:focus {
   }
   .top8-form {
     padding: 1rem;
+  }
+}
+
+.back-btn {
+  margin: 1rem auto 2rem auto;
+  display: block;
+  background: transparent;
+  color: #ffee8c;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.7rem 2rem;
+  border: none;
+
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+    background: rgba(255, 238, 140, 0.2);
+    border: 1.5px solid var(--primary-color, #ffee8c);
+    border-radius: 0.7rem;
   }
 }
 </style>
