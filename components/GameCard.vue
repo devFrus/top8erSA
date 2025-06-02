@@ -1,6 +1,6 @@
 <template>
   <section class="cards">
-    <article class="card card--1">
+    <article @click="$emit('game', 'melee')" class="card card--1">
 
       <div class="card__img"></div>
       <div class="card_link">
@@ -8,7 +8,6 @@
       </div>
       <div class="card__info">
         <h3 class="card__title">Super Smash Bros Melee</h3>
-        <span class="card__category">Próximamente...</span>
       </div>
     </article>
 
@@ -37,7 +36,6 @@
 .card--1 .card__img,
 .card--1 .card__img--hover {
   background-image: url("/img/SSBM_art.png");
-  filter:grayscale(100%);
   background-size: 100% auto;
 }
 
