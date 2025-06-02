@@ -59,6 +59,14 @@
       <div v-if="loader" class="loader"></div>
       <div v-else>Guardar</div>
     </button>
+
+    <button
+      class="back-btn"
+      :class="{ 'mobile-button': !$device.isDesktop, loading: loader }"
+      @click="$emit('back')"
+>
+     Atrás
+    </button>
   </div>
 </template>
 <script lang="ts" setup>
@@ -287,7 +295,7 @@ const saveHtmlToImagePNG = () => {
   font-weight: 700;
   font-size: 1.1rem;
   padding: 0.7rem 2rem;
-  border: none;
+  border: 1px solid var(--primary-color, #ffee8c);
   border-radius: 0.7rem;
   box-shadow: 0 2px 8px rgba(255, 238, 140, 0.18);
   cursor: pointer;
@@ -296,7 +304,8 @@ const saveHtmlToImagePNG = () => {
 .screenshot-btn:hover {
   background: #232946;
   color: var(--primary-color, #ffee8c);
-  border: 1.5px solid var(--primary-color, #ffee8c);
+  
+  border: 1px solid var(--primary-color, #ffee8c);
 }
 
 
@@ -314,7 +323,24 @@ const saveHtmlToImagePNG = () => {
     font-weight: bold;
   }
 }
+.back-btn {
+  margin: 1rem auto 2rem auto;
+  display: block;
+  background: transparent;
+  color: #ffee8c;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.7rem 2rem;
+  border: none;
 
+  cursor: pointer;
+  &:hover {
+    color: #fff;
+    background: rgba(255, 238, 140, 0.2);
+    border: 1.5px solid var(--primary-color, #ffee8c);
+    border-radius: 0.7rem;
+  }
+}
 .message {
   position: absolute;
   top: 30rem;

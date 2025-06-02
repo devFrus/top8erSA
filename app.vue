@@ -1,8 +1,8 @@
 <template>
   <div class="background">
-    <Form v-if="!formFilled" @form-submitted="handleForm"></Form>
+    <Form v-show="!formFilled" @form-submitted="handleForm"></Form>
     <Top8
-      v-else
+      v-show="formFilled"
       :players="players"
       :logo="logo"
       :primary-color="primaryColor"
@@ -10,6 +10,8 @@
       :tournament-date="tournamentDate"
       :tournament-name="tournamentName"
       :tournament-url="tournamentUrl"
+
+      @back="formFilled = false"
     ></Top8>
   </div>
 </template>
