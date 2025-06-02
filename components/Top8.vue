@@ -62,7 +62,7 @@
         <br />
         <span>Diseñado por:</span>
         <a
-          href="https://twitter.com/kete_smush"
+          href="https://twitter.com/Joseluisasdfg"
           target="_blank"
           rel="noopener noreferrer"
         >
