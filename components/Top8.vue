@@ -368,7 +368,7 @@ const saveHtmlToImagePNG = () => {
 }
 
 .credits {
-  text-align: right;
+  text-align: left;
 
   color: #fff;
   font-size: 1.2rem;
