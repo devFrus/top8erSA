@@ -85,6 +85,7 @@ const props = defineProps<{
     font-family: "Proxima Nova Italic", Arial, sans-serif;
     font-weight: bold;
     color: #fff;
+    text-shadow: 4px 4px rgba(100, 9, 75, 0.91);
   }
   &-1 {
     grid-row: span 3;

@@ -8,9 +8,9 @@
     </div>
     <div v-else>
       <!-- Botón de autocompletar para pruebas -->
-      <!-- <button type="button" class="fill-btn" @click="fillRandom">
+      <button type="button" class="fill-btn" @click="fillRandom">
         Rellenar aleatorio
-      </button> -->
+      </button>
       <!-- Nuevo campo para subir logo del torneo -->
       <div class="tournament-logo-field">
         <label>
