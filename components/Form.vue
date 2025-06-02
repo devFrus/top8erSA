@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submitForm" class="top8-form">
-  <div class="title" :class="{mobile: $device.isMobile}">Smash Alicante Top 8 maker</div>
+  <div class="title" :class="{mobile: $device.isMobile}">Smash Alicante <br><span class="subtitle">Top 8 Maker</span></div>
     <!-- Botón de autocompletar para pruebas -->
     <button type="button" class="fill-btn" @click="fillRandom">Rellenar aleatorio</button>
     <!-- Nuevo campo para subir logo del torneo -->
@@ -126,9 +126,11 @@
       <label>
         Url del torneo:
         <input type="text" v-model="tournamentUrl" placeholder="Ej: start.gg/vortex-14" />
+        <!-- NUEVO: Mensaje de error para URL -->
+        <span v-if="tournamentUrlError" class="error-msg">Formato incorrecto"</span>
       </label>
     </div>
-    <button type="submit" class="submit-btn">Guardar Top 8</button>
+    <button type="submit" class="submit-btn">Continuar</button>
   </form>
 </template>
 
@@ -184,6 +186,17 @@ const secondaryColor = ref("#66195f");
 const tournamentName = ref("");
 const tournamentDate = ref("");
 const tournamentUrl = ref("");
+const tournamentUrlError = ref(false);
+
+function validateTournamentUrl() {
+  // Si está vacío, no hay error (es opcional)
+  if (!tournamentUrl.value.trim()) {
+    tournamentUrlError.value = false;
+    return;
+  }
+  // Si tiene contenido, valida el formato
+  tournamentUrlError.value = !/^start\.gg\/[a-zA-Z0-9\-_]+$/i.test(tournamentUrl.value.trim());
+}
 
 // Logo
 function onLogoChange(event: Event) {
@@ -318,9 +331,11 @@ function hideSecondarySuggestions(idx: number, sidx: number) {
 
 // Envío
 function submitForm() {
+  validateTournamentUrl();
+  if (tournamentUrlError.value) return;
   emit("formSubmitted", {
     players,
-    logo: logoPreview.value, // Puedes enviar el base64 o el File según lo que necesites
+    logo: logoPreview.value,
     primaryColor: primaryColor.value,
     secondaryColor: secondaryColor.value,
     tournamentName: tournamentName.value,
@@ -383,16 +398,24 @@ function fillRandom() {
 <style scoped>
 .title {
   font-family: "Proxima Nova", sans-serif;
-  font-weight: 700;
+  font-weight: 900;
   font-size: 4.5rem;
-  color: var(--accent);
+  color: rgba(255, 255, 245, 0.998);
   text-align: center;
   margin-bottom: 2rem;
-  letter-spacing: 0.03em;
-  text-shadow: 0 2px 16px #23294655;
-  &.mobile {
-    font-size: 3.5rem;
+  letter-spacing: 0.04em;
+  border-radius: 1rem;
+  padding: 0.5rem 0;
+  transition: background 0.3s, color 0.3s;
+  user-select: none;
+  .subtitle {
+    border-top:#ffee8c 4px solid;
+    text-shadow: 4px 3px 2px rgba(231, 235, 7, 0.929);
+    color: #2269EC;
   }
+}
+.title.mobile {
+  font-size: 3.5rem;
 }
 .icon {
   width: 1.5rem;
@@ -404,7 +427,7 @@ function fillRandom() {
   background: var(--primary-bg);
   padding: 2rem;
   border-radius: 1.5rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: 6px 6px 11px aqua;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -511,9 +534,10 @@ input[type="text"]:focus {
   flex: 1;
 }
 .secondary-char button {
+  margin-top: 0.2rem;
   background: #393a56;
   color: #ffee8c;
-  border: none;
+  border: 1px solid #393a56;
   border-radius: 0.5rem;
   padding: 0.3rem 0.8rem;
   font-weight: 600;
@@ -523,6 +547,7 @@ input[type="text"]:focus {
 }
 .secondary-char button:hover {
   background: #ffee8c;
+  border: 1px solid #ffee8c;
   color: #232946;
 }
 
@@ -655,6 +680,17 @@ input[type="text"]:focus {
   outline: none;
   background: #232946;
   color: var(--accent);
+}
+
+/* Añade a tu style scoped */
+.invalid {
+  border-color: #ff4d4f !important;
+}
+.error-msg {
+  color: #ff4d4f;
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+  display: block;
 }
 
 @media (max-width: 1100px) {

@@ -20,6 +20,14 @@
 
 <script setup lang="ts">
 import Twitter from "~/assets/icons/twitter.svg";
+import fitty from "fitty";
+onMounted(() => {
+  // Ajusta el tamaño de los nombres de los jugadores
+  nextTick(() => {
+    fitty(".name", { minSize: 20, maxSize: 40 });
+    fitty(".name-1", { minSize: 30, maxSize: 56, multiLine: false });
+  });
+});
 const props = defineProps<{
   player: any;
   position: number;
@@ -55,10 +63,10 @@ const props = defineProps<{
   min-height: 5rem;
 
   .name {
-    font-size: 2.5vw;
+    // font-size: 2.5vw;
     font-weight: bold;
     color: #fff;
-    z-index: 2;
+    z-index: 3;
     white-space: nowrap;
     position: absolute;
     bottom: 2rem;
@@ -117,8 +125,8 @@ const props = defineProps<{
     }
   }
 
-  &-5,
-  &-7 {
+  &-5,&-6,
+  &-7,&-8 {
     min-height: 6.85em;
     .name {
       font-size: 2.3rem;

@@ -73,17 +73,11 @@
 import { computed, ref } from "vue";
 import Twitter from "~/assets/icons/twitter.svg";
 import Startgg from "~/assets/icons/startgg.svg";
-import fitty from "fitty";
+
 import * as htmlToImage from "html-to-image";
 import { saveAs } from "file-saver";
 
-onMounted(() => {
-  // Ajusta el tamaño de los nombres de los jugadores
-  nextTick(() => {
-    fitty(".name", { minSize: 20, maxSize: 40 });
-    fitty(".name-1", { minSize: 30, maxSize: 56, multiLine: false });
-  });
-});
+
 interface Player {
   name: string;
   position: number;

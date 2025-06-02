@@ -3833,7 +3833,7 @@ export const characters: Character[] = [
       },
       top7: {
         backgroundSize: "30rem",
-        backgroundPosition: "-7rem -4rem",
+        backgroundPosition: "-7rem -2rem",
         width: "350px",
         height: "67px",
       },

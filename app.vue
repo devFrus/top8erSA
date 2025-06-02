@@ -63,8 +63,7 @@ body {
 }
 .background {
   width: 100vw;
-  height: 100vh;
-  padding-top: 2rem;
+  padding: 2rem 0;
 }
 
 @font-face {
