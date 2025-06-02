@@ -8,6 +8,7 @@
       </div>
       <div class="card__info">
         <h3 class="card__title">Super Smash Bros Melee</h3>
+        <span class="card__category">Próximamente...</span>
       </div>
     </article>
 
@@ -77,7 +78,7 @@
   background-repeat: no-repeat;
   width: 100%;
   position: absolute;
-  height: 80%;
+  height: 284px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   top: 0;
