@@ -35,15 +35,13 @@
 
 .card--1 .card__img,
 .card--1 .card__img--hover {
-  background-image: url("/img/SSBM_art.png");
-  background-size: 100% auto;
+  background-image: url("/img/SSBM_art.jpg");
+  background-size: 100% 100%;
 }
 
 .card--2 .card__img,
 .card--2 .card__img--hover {
   background-image: url("/img/SSBU_art.jpg");
-  background-size: 100% auto;
-
 }
 
 
@@ -56,7 +54,7 @@
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
-  height: 280px;
+  height: 405px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -76,7 +74,7 @@
   background-repeat: no-repeat;
   width: 100%;
   position: absolute;
-  height: 284px;
+  height: 417px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   top: 0;
@@ -97,6 +95,7 @@
 }
 
 .card__info {
+font-family: "Proxima Nova", Arial, sans-serif;
   z-index: 2;
   background-color: #fff;
   border-bottom-left-radius: 12px;
