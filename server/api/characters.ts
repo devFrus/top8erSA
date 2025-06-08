@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
   const idsParam = query.ids as Array<Int32Array>;
 
   let filtered = game === 'melee'  ? charactersMelee : characters;
-  console.log("Game selected:", game);
-  console.log(filtered)
+  
   // ✅ Filtro por IDs
   if (idsParam) {
     const ids = idsParam
