@@ -3358,9 +3358,9 @@ export const characters: Character[] = [
         height: "67px",
       },
       top7: {
-        backgroundSize: "27rem",
-        backgroundPosition: "-0rem -3rem",
-        width: "342px",
+        backgroundSize: "35rem",
+        backgroundPosition: "-9rem -2rem",
+        width: "350px",
         height: "67px",
       },
     },
@@ -3808,7 +3808,7 @@ export const characters: Character[] = [
         backgroundSize: "23rem",
         bottom: "0.5rem",
         right: "0",
-        width: "345px",
+        width: "382px",
         height: "208px",
       },
       top3: {

@@ -12,8 +12,9 @@
         <img :src="`${getIconRoute(char)}`" class="char-icon" />
       </div>
     </div>
-    <div class="handle" v-if="player?.handle">
-      <Twitter class="icon" />{{ player.handle }}
+    <div class="handle">
+      <span v-if="player?.handle"><Twitter class="icon" />{{ player.handle }}</span>
+      <span v-else><Twitter class="icon hidden" />&#8192</span>
     </div>
   </div>
 </template>
@@ -198,6 +199,9 @@ const props = defineProps<{
   height: 1.5rem;
   margin-right: 0.2rem;
   vertical-align: middle;
+  &.hidden {
+    color: var(--secondary-color);
+  }
 }
 
 /* Responsive */
