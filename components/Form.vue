@@ -292,7 +292,7 @@ async function loadStandingsFromUrl() {
   loadingStandings.value = true;
 
   try {
-    const response = await $fetch('/api/startgg', {
+    const response = await $fetch<any>('/api/startgg', {
       method: 'POST',
       body: {
         url: tournamentUrl.value.trim(),
