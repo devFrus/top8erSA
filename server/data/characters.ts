@@ -3533,9 +3533,9 @@ export const characters: Character[] = [
         right: "0",
       },
       top4: {
-        backgroundSize: "18rem",
-        bottom: "0.5rem",
-        right: "0",
+        backgroundSize: "16rem",
+        bottom: "1rem",
+        right: "-25px",
         width: "311px",
         height: "150px",
       },
