@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
+  runtimeConfig: {
+    startggApiToken: process.env.STARTGG_API_TOKEN,
+  },
   modules: ['nuxt-svgo', '@nuxtjs/device'],
   app: {
     head: {

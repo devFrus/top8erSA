@@ -162,13 +162,25 @@
           <input
             type="text"
             v-model="tournamentUrl"
-            placeholder="Ej: start.gg/vortex-14"
+            placeholder="Ej: https://start.gg/tournament/vortex-14/event/123456"
           />
           <!-- NUEVO: Mensaje de error para URL -->
           <span v-if="tournamentUrlError" class="error-msg"
-            >Formato incorrecto"</span
+            >Formato incorrecto</span
           >
         </label>
+        <div class="url-actions">
+          <button
+            type="button"
+            class="load-btn"
+            @click="loadStandingsFromUrl"
+            :disabled="loadingStandings || !tournamentUrl.trim()"
+          >
+            <span v-if="loadingStandings">Cargando...</span>
+            <span v-else>Cargar top 8 desde start.gg</span>
+          </button>
+          <span v-if="standingsError" class="error-msg">{{ standingsError }}</span>
+        </div>
       </div>
       <button type="submit" class="submit-btn">Continuar</button>
       <button class="back-btn" @click="clearData">Atrás</button>
@@ -257,6 +269,8 @@ const tournamentName = ref("");
 const tournamentDate = ref("");
 const tournamentUrl = ref("");
 const tournamentUrlError = ref(false);
+const loadingStandings = ref(false);
+const standingsError = ref("");
 
 function validateTournamentUrl() {
   // Si está vacío, no hay error (es opcional)
@@ -264,11 +278,85 @@ function validateTournamentUrl() {
     tournamentUrlError.value = false;
     return;
   }
-  // Si tiene contenido, valida el formato
-  tournamentUrlError.value = !/^start\.gg\/[a-zA-Z0-9\-_]+$/i.test(
+  // Si tiene contenido, valida el formato completo o solo el slug/event
+  tournamentUrlError.value = !/^(https?:\/\/)?(www\.)?start\.gg\/(tournament\/[a-zA-Z0-9\-_]+\/event\/[a-zA-Z0-9\-_]+|event\/[a-zA-Z0-9\-_]+|[a-zA-Z0-9\-_]+)$/i.test(
     tournamentUrl.value.trim()
   );
 }
+
+async function loadStandingsFromUrl() {
+  validateTournamentUrl();
+  if (tournamentUrlError.value || !tournamentUrl.value.trim()) return;
+
+  standingsError.value = "";
+  loadingStandings.value = true;
+
+  try {
+    const response = await $fetch('/api/startgg', {
+      method: 'POST',
+      body: {
+        url: tournamentUrl.value.trim(),
+        page: 1,
+        perPage: 8,
+      },
+    });
+
+    const playersFromApi = response?.players ?? response?.data?.players ?? [];
+    const apiTournamentName = response?.tournamentName ?? response?.data?.tournamentName ?? response?.data?.event?.tournament?.name ?? response?.event?.tournament?.name ?? response?.eventName ?? response?.data?.event?.name ?? response?.event?.name ?? '';
+    const apiEventDate = response?.eventDate ?? response?.data?.eventDate ?? response?.data?.event?.eventDate ?? response?.event?.eventDate ?? '';
+
+    if (!Array.isArray(playersFromApi) || playersFromApi.length === 0) {
+      throw new Error('No se encontraron standings válidos en start.gg');
+    }
+
+    tournamentName.value = apiTournamentName || tournamentName.value;
+    if (apiEventDate) {
+      const date = new Date(apiEventDate);
+      if (!Number.isNaN(date.getTime())) {
+        tournamentDate.value = date.toISOString().slice(0, 10);
+      }
+    }
+
+    const rankings = playersFromApi.slice(0, 8);
+
+    rankings.forEach((playerData: any, idx: number) => {
+      players[idx].name = playerData.name || '';
+      players[idx].handle = playerData.twitterHandle || playerData.handle || '';
+      players[idx].character = playerData.character || '';
+      players[idx].characterID =
+        allCharacters.find(
+          (character) =>
+            character.name.toLowerCase() === String(playerData.character || '').toLowerCase()
+        )?.id ?? null;
+      players[idx].filteredCharacters = allCharacters;
+      players[idx].showSuggestions = false;
+      players[idx].activeSuggestion = 0;
+      players[idx].secondaryCharacters = Array.isArray(playerData.secondaryCharacters)
+        ? playerData.secondaryCharacters.filter(Boolean)
+        : [];
+      players[idx].filteredSecondaryCharacters = players[idx].secondaryCharacters.map(() => allCharacters);
+      players[idx].showSecondarySuggestions = players[idx].secondaryCharacters.map(() => false);
+      players[idx].activeSecondarySuggestion = players[idx].secondaryCharacters.map(() => 0);
+    });
+
+    for (let idx = rankings.length; idx < players.length; idx++) {
+      players[idx].name = '';
+      players[idx].handle = '';
+      players[idx].character = '';
+      players[idx].characterID = null;
+      players[idx].secondaryCharacters = [];
+      players[idx].filteredSecondaryCharacters = [];
+      players[idx].showSecondarySuggestions = [];
+      players[idx].activeSecondarySuggestion = [];
+      players[idx].filteredCharacters = allCharacters;
+    }
+  } catch (error: any) {
+    standingsError.value = error?.message || 'Error al cargar el top 8 de start.gg';
+  } finally {
+    loadingStandings.value = false;
+  }
+}
+
 const handleGameSelection = (game: string) => {
   gameSelected.value = game;
   // Cargar los personajes del juego seleccionado
