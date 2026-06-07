@@ -8,15 +8,15 @@
     </div>
     <div v-else>
       <!-- Botón de autocompletar para pruebas -->
-      <button type="button" class="fill-btn" @click="fillRandom">
+      <!-- <button type="button" class="fill-btn" @click="fillRandom">
         Rellenar aleatorio
-      </button>
+      </button> -->
       <!-- Nuevo campo para subir logo del torneo -->
       <div class="tournament-logo-field">
         <label>
           Logo del torneo:
-          <input type="file" accept="image/*" @change="onLogoChange" />
         </label>
+        <input type="file" accept="image/*" @change="onLogoChange" />
         <div v-if="logoPreview" class="logo-preview">
           <img :src="logoPreview" alt="Logo preview" />
         </div>
@@ -832,6 +832,7 @@ input[type="text"]:focus {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  color: var(--text-main);
 }
 .tournament-logo-field label {
   color: var(--text-main);
@@ -920,7 +921,31 @@ input[type="text"]:focus {
   color: var(--accent);
 }
 
-/* Añade a tu style scoped */
+.url-actions {
+  align-content: center;
+}
+.url-actions > .load-btn {
+  margin-top: 0.9rem;
+  background: #393a56;
+  color: #ffee8c;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  &:disabled {
+    background: #232946;
+    color: #555;
+    cursor: not-allowed;
+  }
+  &:hover:not(:disabled) {
+    background: #ffee8c;
+    color: #232946;
+  }
+}
 .invalid {
   border-color: #ff4d4f !important;
 }
