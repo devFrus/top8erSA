@@ -49,7 +49,7 @@
           class="tournamentUrl"
         >
           <Startgg class="icon" />
-          start.gg/<span>{{ props.tournamentUrl.split("/")[1] }}</span>
+          start.gg/<span>{{ props.tournamentUrl.split("/")[4] }}</span>
         </div>
         <div class="credits">
           <span>Programado por:</span>
